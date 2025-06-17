@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.14.36109.1 d17.14
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "r6marketplaceclient", "r6marketplaceclient.csproj", "{0488FED3-797D-4272-A543-481307AD697D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "r6marketplaceclient", "r6marketplaceclient.csproj", "{A41FD4E1-5E4A-469C-B14D-89DC853AB23B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,15 +11,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{0488FED3-797D-4272-A543-481307AD697D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0488FED3-797D-4272-A543-481307AD697D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0488FED3-797D-4272-A543-481307AD697D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0488FED3-797D-4272-A543-481307AD697D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A41FD4E1-5E4A-469C-B14D-89DC853AB23B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A41FD4E1-5E4A-469C-B14D-89DC853AB23B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A41FD4E1-5E4A-469C-B14D-89DC853AB23B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A41FD4E1-5E4A-469C-B14D-89DC853AB23B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {0E6134C7-5FDD-420C-811B-753E2D86A364}
+		SolutionGuid = {B086E2F7-C405-4A8C-B30A-37D95DC1261E}
 	EndGlobalSection
 EndGlobal

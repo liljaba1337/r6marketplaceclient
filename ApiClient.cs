@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using r6_marketplace;
@@ -10,16 +13,28 @@ namespace r6marketplaceclient
 {
     internal static class ApiClient
     {
-        // you can use this one for testing, it's completely empty
-        private const string email = "test@sendmeyourfeet.pics";
-        private const string password = "Twenty3??";
-        private static R6MarketplaceClient client = new R6MarketplaceClient();
+        private static R6MarketplaceClient client;
+        private static readonly string[] settings;
         
+        static ApiClient()
+        {
+            settings = File.ReadAllLines("settings.txt");
+            WebProxy proxy = new WebProxy(settings[2]);
+            proxy.Credentials = new NetworkCredential(settings[3], settings[4]);
+            client = new R6MarketplaceClient(new HttpClient(new HttpClientHandler
+            {
+                Proxy = proxy,
+                UseProxy = true,
+                AllowAutoRedirect = false
+            }), settings[5]);
+        }
+
         private static async Task TryAuth()
         {
             if (!client.isAuthenticated)
             {
-                await client.Authenticate(email, password);
+                string token = await client.Authenticate(settings[0], settings[1]);
+                Debug.WriteLine(token);
             }
         }
 
