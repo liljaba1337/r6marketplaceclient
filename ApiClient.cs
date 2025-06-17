@@ -9,6 +9,7 @@ namespace r6marketplaceclient
 {
     internal static class ApiClient
     {
+        // you can use this one for testing, it's completely empty
         private const string email = "test@sendmeyourfeet.pics";
         private const string password = "Twenty3??";
         private static R6MarketplaceClient client = new R6MarketplaceClient();
