@@ -13,12 +13,11 @@ namespace r6marketplaceclient.CustomControls
         private Button dropdownButton;
         private ListBox listBox;
         private Form dropdownForm;
-        bool justClosed = false;
 
         public event EventHandler SelectedIndexChanged;
         public List<string> Items { get; private set; } = new List<string>();
         public int SelectedIndex { get; private set; } = -1;
-        public string SelectedItem => SelectedIndex >= 0 && SelectedIndex < Items.Count ? Items[SelectedIndex] : "";
+        public string SelectedItem => SelectedIndex >= 0 && SelectedIndex < Items.Count ? Items[SelectedIndex] : "All";
 
         public Color DarkBackColor { get; set; } = Color.FromArgb(30, 30, 30);
         public Color DarkForeColor { get; set; } = Color.White;
@@ -36,7 +35,8 @@ namespace r6marketplaceclient.CustomControls
                 TextAlign = ContentAlignment.MiddleLeft,
                 Padding = new Padding(5, 0, 0, 0),
                 BackColor = DarkBackColor,
-                ForeColor = DarkForeColor
+                ForeColor = DarkForeColor,
+                Text = "All"
             };
 
             dropdownButton = new Button
@@ -50,12 +50,14 @@ namespace r6marketplaceclient.CustomControls
             };
             dropdownButton.FlatAppearance.BorderSize = 0;
 
-            dropdownButton.Click += (s, e) =>
+            dropdownButton.MouseClick += (s, e) =>
             {
-                if (!dropdownForm.Visible && !justClosed)
-                {
-                    DropdownButton_Click(s, e);
-                }
+                DropdownButton_Click(s, e);
+            };
+
+            this.MouseClick += (s, e) =>
+            {
+                DropdownButton_Click(s, e);
             };
 
             this.Controls.Add(selectedLabel);
@@ -87,18 +89,8 @@ namespace r6marketplaceclient.CustomControls
             };
             dropdownForm.Deactivate += (s, e) =>
             {
-                // I didn't find a better way to prevent the dropdown from opening when clicking the button to close it
                 dropdownForm.Hide();
-                justClosed = true;
-                var timer = new System.Windows.Forms.Timer();
-                timer.Interval = 200; // ms delay
-                timer.Tick += (s2, e2) =>
-                {
-                    justClosed = false;
-                    timer.Stop();
-                    timer.Dispose();
-                };
-                timer.Start();
+                dropdownButton.Enabled = true;
             };
             dropdownForm.Controls.Add(listBox);
         }
@@ -108,6 +100,7 @@ namespace r6marketplaceclient.CustomControls
             if (dropdownForm.Visible)
             {
                 dropdownForm.Hide();
+                dropdownButton.Enabled = true;
                 return;
             }
 
@@ -121,6 +114,7 @@ namespace r6marketplaceclient.CustomControls
 
             var screenPos = this.PointToScreen(Point.Empty);
             dropdownForm.Location = new Point(screenPos.X, screenPos.Y + this.Height);
+            dropdownButton.Enabled = false;
             dropdownForm.Show();
             listBox.Focus();
         }
@@ -130,6 +124,7 @@ namespace r6marketplaceclient.CustomControls
             SelectedIndex = listBox.SelectedIndex;
             selectedLabel.Text = SelectedItem;
             dropdownForm.Hide();
+            dropdownButton.Enabled = true;
             SelectedIndexChanged?.Invoke(this, EventArgs.Empty);
         }
 

@@ -10,6 +10,14 @@ namespace r6marketplaceclient
         private readonly MainPageBackend backend;
         private void SetupComponents()
         {
+            weaponFilterComboBox.Items.Add("All");
+            rarityFilterComboBox.Items.Add("All");
+            operatorFilterComboBox.Items.Add("All");
+            seasonFilterComboBox.Items.Add("All");
+            teamFilterComboBox.Items.Add("All");
+            eventFilterComboBox.Items.Add("All");
+            typeFilterComboBox.Items.Add("All");
+
             weaponFilterComboBox.Items.AddRange(
                 Enum.GetNames(typeof(r6_marketplace.Utils.SearchTags.Weapon))
                     .Select(r6_marketplace.Utils.SearchTags.GetOriginalName)
@@ -83,7 +91,7 @@ namespace r6marketplaceclient
             }
         }
 
-        private async void searchBox_Leave(object sender, EventArgs e)
+        private void searchBox_Leave(object sender, EventArgs e)
         {
             //await backend.PerformSearch();
         }

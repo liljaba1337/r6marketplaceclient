@@ -4,26 +4,32 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using r6_marketplace.Classes.Item;
+using r6marketplaceclient.CustomControls;
+using r6marketplaceclient.ItemCard;
 
 namespace r6marketplaceclient
 {
     internal class MainPageBackend
     {
+        private readonly ToolTip priceToolTip = new ToolTip();
         private int currentPage = 1;
         private readonly Form1 form;
         private List<PurchasableItem>? items;
+        private readonly HashSet<string> visibleCards = new HashSet<string>();
         internal MainPageBackend(Form1 form)
         {
             this.form = form;
         }
-        private List<Enum>? GetSearchTags()
-        {
-            return new();
-        }
         private void ShowEnhancedItemCard(PurchasableItem item)
         {
-            Debug.WriteLine($"Showing details for item: {item.Name}");
+            if (!visibleCards.Contains(item.ID))
+            {
+                var itemCard = new ItemCardForm(item);
+                itemCard.Show();
+                visibleCards.Add(item.ID);
+            }
         }
         private void MakeCardClickable(Control card, EventHandler handler)
         {
@@ -35,11 +41,31 @@ namespace r6marketplaceclient
                 MakeCardClickable(child, handler);
             }
         }
-        private async Task AddItemCard(PurchasableItem item)
+        private async Task AddItemCardAvgPrice(PurchasableItem item, FlowLayoutPanel pricePanel)
         {
-            var priceToolTip = new ToolTip();
             var itemHistory = await ApiClient.GetItemPriceHistory(item.ID);
 
+            // 7-day average label
+            Label lblAvg7 = new Label();
+            lblAvg7.Text = $"{Math.Round(itemHistory!.Reverse().Take(7).Average)}";
+            lblAvg7.AutoSize = true;
+            lblAvg7.TextAlign = ContentAlignment.MiddleLeft;
+            lblAvg7.ForeColor = Color.DarkOrange;
+            priceToolTip.SetToolTip(lblAvg7, "7-day average price");
+
+            // 30-day average label
+            Label lblAvg30 = new Label();
+            lblAvg30.Text = $"{Math.Round(itemHistory.Average)}";
+            lblAvg30.AutoSize = true;
+            lblAvg30.TextAlign = ContentAlignment.MiddleLeft;
+            lblAvg30.ForeColor = Color.DarkOrange;
+            priceToolTip.SetToolTip(lblAvg30, "30-day average price");
+
+            pricePanel.Controls.Add(lblAvg7);
+            pricePanel.Controls.Add(lblAvg30);
+        }
+        private async Task<FlowLayoutPanel> AddItemCard(PurchasableItem item)
+        {
             // Create the card panel
             Panel card = new Panel();
             card.Width = 150;
@@ -83,26 +109,8 @@ namespace r6marketplaceclient
             lblPrice.ForeColor = Color.DarkGreen;
             priceToolTip.SetToolTip(lblPrice, "Current price");
 
-            // 7-day average label
-            Label lblAvg7 = new Label();
-            lblAvg7.Text = $"{Math.Round(itemHistory!.Reverse().Take(7).Average)}";
-            lblAvg7.AutoSize = true;
-            lblAvg7.TextAlign = ContentAlignment.MiddleLeft;
-            lblAvg7.ForeColor = Color.DarkOrange;
-            priceToolTip.SetToolTip(lblAvg7, "7-day average price");
-
-            // 30-day average label
-            Label lblAvg30 = new Label();
-            lblAvg30.Text = $"{Math.Round(itemHistory.Average)}";
-            lblAvg30.AutoSize = true;
-            lblAvg30.TextAlign = ContentAlignment.MiddleLeft;
-            lblAvg30.ForeColor = Color.DarkOrange;
-            priceToolTip.SetToolTip(lblAvg30, "30-day average price");
-
             // Add to price panel
             pricePanel.Controls.Add(lblPrice);
-            pricePanel.Controls.Add(lblAvg7);
-            pricePanel.Controls.Add(lblAvg30);
 
             // Add other elements to the card
             card.Controls.Add(pricePanel);   // Add after pic and lblName if needed
@@ -113,6 +121,7 @@ namespace r6marketplaceclient
             form.flowItems.Controls.Add(card);
 
             MakeCardClickable(card, (s, e) => { ShowEnhancedItemCard(item); });
+            return pricePanel; // Return the price panel for further customization
         }
         private async Task RenderItemCards(int page = 1)
         {
@@ -120,9 +129,14 @@ namespace r6marketplaceclient
             form.flowItems.Controls.Clear();
             if (items == null) return;
             UpdatePaginationControls(page);
+            List<FlowLayoutPanel> pricePanels = new List<FlowLayoutPanel>();
             foreach (var item in items.Skip((page-1)*8).Take(8))
             {
-                await AddItemCard(item);
+                pricePanels.Add(await AddItemCard(item));
+            }
+            for (int i = 0; i < pricePanels.Count; i++)
+            {
+                await AddItemCardAvgPrice(items.Skip((page - 1) * 8).ElementAt(i), pricePanels[i]);
             }
         }
         private void UpdatePaginationControls(int page)
@@ -212,10 +226,21 @@ namespace r6marketplaceclient
         }
         internal async Task PerformSearch()
         {
+            List<string> tags = new List<string>();
+            List<string> types = new List<string>();
+            if (form.weaponFilterComboBox.SelectedItem != "All") tags.Add(form.weaponFilterComboBox.SelectedItem.ToString());
+            if (form.rarityFilterComboBox.SelectedItem != "All") tags.Add(form.rarityFilterComboBox.SelectedItem.ToString());
+            if (form.operatorFilterComboBox.SelectedItem != "All") tags.Add(form.operatorFilterComboBox.SelectedItem.ToString());
+            if (form.seasonFilterComboBox.SelectedItem != "All") tags.Add(form.seasonFilterComboBox.SelectedItem.ToString());
+            if (form.teamFilterComboBox.SelectedItem != "All") tags.Add(form.teamFilterComboBox.SelectedItem.ToString());
+            if (form.eventFilterComboBox.SelectedItem != "All") tags.Add(form.eventFilterComboBox.SelectedItem.ToString());
+            if (form.typeFilterComboBox.SelectedItem != "All") types.Add(form.typeFilterComboBox.SelectedItem.ToString());
+
             currentPage = 1;
             items = await ApiClient.Search(
                 form.searchBox.Text,
-                GetSearchTags(),
+                tags,
+                types,
                 form.minPrice,
                 form.maxPrice
             );

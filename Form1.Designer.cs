@@ -149,7 +149,7 @@ namespace r6marketplaceclient
             maxPriceTextBox.BackColor = Color.FromArgb(52, 52, 52);
             maxPriceTextBox.BorderStyle = BorderStyle.FixedSingle;
             maxPriceTextBox.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            maxPriceTextBox.ForeColor = Color.FromArgb(153, 154, 155);
+            maxPriceTextBox.ForeColor = Color.White;
             maxPriceTextBox.Location = new Point(82, 362);
             maxPriceTextBox.Name = "maxPriceTextBox";
             maxPriceTextBox.Size = new Size(65, 23);
@@ -164,7 +164,7 @@ namespace r6marketplaceclient
             minPriceTextBox.BackColor = Color.FromArgb(52, 52, 52);
             minPriceTextBox.BorderStyle = BorderStyle.FixedSingle;
             minPriceTextBox.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            minPriceTextBox.ForeColor = Color.FromArgb(153, 154, 155);
+            minPriceTextBox.ForeColor = Color.White;
             minPriceTextBox.Location = new Point(3, 362);
             minPriceTextBox.Name = "minPriceTextBox";
             minPriceTextBox.Size = new Size(57, 23);
@@ -177,9 +177,12 @@ namespace r6marketplaceclient
             // seasonFilterComboBox
             // 
             seasonFilterComboBox.BackColor = Color.FromArgb(52, 52, 52);
+            seasonFilterComboBox.DarkBackColor = Color.FromArgb(30, 30, 30);
+            seasonFilterComboBox.DarkForeColor = Color.White;
             seasonFilterComboBox.ForeColor = Color.FromArgb(153, 154, 155);
             seasonFilterComboBox.Location = new Point(3, 178);
             seasonFilterComboBox.Name = "seasonFilterComboBox";
+            seasonFilterComboBox.SelectedItemColor = Color.FromArgb(60, 60, 60);
             seasonFilterComboBox.Size = new Size(144, 23);
             seasonFilterComboBox.TabIndex = 1;
             seasonFilterComboBox.TabStop = false;
@@ -188,9 +191,12 @@ namespace r6marketplaceclient
             // eventFilterComboBox
             // 
             eventFilterComboBox.BackColor = Color.FromArgb(52, 52, 52);
+            eventFilterComboBox.DarkBackColor = Color.FromArgb(30, 30, 30);
+            eventFilterComboBox.DarkForeColor = Color.White;
             eventFilterComboBox.ForeColor = Color.FromArgb(153, 154, 155);
             eventFilterComboBox.Location = new Point(3, 265);
             eventFilterComboBox.Name = "eventFilterComboBox";
+            eventFilterComboBox.SelectedItemColor = Color.FromArgb(60, 60, 60);
             eventFilterComboBox.Size = new Size(144, 23);
             eventFilterComboBox.TabIndex = 1;
             eventFilterComboBox.TabStop = false;
@@ -210,9 +216,12 @@ namespace r6marketplaceclient
             // typeFilterComboBox
             // 
             typeFilterComboBox.BackColor = Color.FromArgb(52, 52, 52);
+            typeFilterComboBox.DarkBackColor = Color.FromArgb(30, 30, 30);
+            typeFilterComboBox.DarkForeColor = Color.White;
             typeFilterComboBox.ForeColor = Color.FromArgb(153, 154, 155);
             typeFilterComboBox.Location = new Point(3, 308);
             typeFilterComboBox.Name = "typeFilterComboBox";
+            typeFilterComboBox.SelectedItemColor = Color.FromArgb(60, 60, 60);
             typeFilterComboBox.Size = new Size(144, 23);
             typeFilterComboBox.TabIndex = 1;
             typeFilterComboBox.TabStop = false;
@@ -221,9 +230,12 @@ namespace r6marketplaceclient
             // rarityFilterComboBox
             // 
             rarityFilterComboBox.BackColor = Color.FromArgb(52, 52, 52);
+            rarityFilterComboBox.DarkBackColor = Color.FromArgb(30, 30, 30);
+            rarityFilterComboBox.DarkForeColor = Color.White;
             rarityFilterComboBox.ForeColor = Color.FromArgb(153, 154, 155);
             rarityFilterComboBox.Location = new Point(3, 92);
             rarityFilterComboBox.Name = "rarityFilterComboBox";
+            rarityFilterComboBox.SelectedItemColor = Color.FromArgb(60, 60, 60);
             rarityFilterComboBox.Size = new Size(144, 23);
             rarityFilterComboBox.TabIndex = 1;
             rarityFilterComboBox.TabStop = false;
@@ -243,9 +255,12 @@ namespace r6marketplaceclient
             // operatorFilterComboBox
             // 
             operatorFilterComboBox.BackColor = Color.FromArgb(52, 52, 52);
+            operatorFilterComboBox.DarkBackColor = Color.FromArgb(30, 30, 30);
+            operatorFilterComboBox.DarkForeColor = Color.White;
             operatorFilterComboBox.ForeColor = Color.FromArgb(153, 154, 155);
             operatorFilterComboBox.Location = new Point(3, 135);
             operatorFilterComboBox.Name = "operatorFilterComboBox";
+            operatorFilterComboBox.SelectedItemColor = Color.FromArgb(60, 60, 60);
             operatorFilterComboBox.Size = new Size(144, 23);
             operatorFilterComboBox.TabIndex = 1;
             operatorFilterComboBox.TabStop = false;
@@ -276,9 +291,12 @@ namespace r6marketplaceclient
             // teamFilterComboBox
             // 
             teamFilterComboBox.BackColor = Color.FromArgb(52, 52, 52);
+            teamFilterComboBox.DarkBackColor = Color.FromArgb(30, 30, 30);
+            teamFilterComboBox.DarkForeColor = Color.White;
             teamFilterComboBox.ForeColor = Color.FromArgb(153, 154, 155);
             teamFilterComboBox.Location = new Point(3, 222);
             teamFilterComboBox.Name = "teamFilterComboBox";
+            teamFilterComboBox.SelectedItemColor = Color.FromArgb(60, 60, 60);
             teamFilterComboBox.Size = new Size(144, 23);
             teamFilterComboBox.TabIndex = 1;
             teamFilterComboBox.TabStop = false;

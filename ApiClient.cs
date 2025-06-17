@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,15 +24,19 @@ namespace r6marketplaceclient
         }
 
         internal static async Task<List<r6_marketplace.Classes.Item.PurchasableItem>> Search(
-            string name = "",
-            IEnumerable<Enum>? filters = null,
+            string name,
+            List<string> tags,
+            List<string> types,
             int minPrice = 10,
             int maxPrice = 1000000,
             int limit = 400,
             int offset = 0)
         {
             await TryAuth();
-            var items = await client.SearchEndpoints.SearchItem(name, filters, limit:limit, offset:offset);
+            var items = await client.SearchEndpoints.SearchItemUnrestricted(name, types, tags,
+                r6_marketplace.Endpoints.SearchEndpoints.SortBy.PurchaseAvailaible,
+                r6_marketplace.Endpoints.SearchEndpoints.SortDirection.DESC, limit, offset, r6_marketplace.Utils.Data.Local.en);
+            Debug.WriteLine($"Found {items.Count} items matching the search criteria.");
             return items.Where(item => item.LastSoldAtPrice >= minPrice && item.LastSoldAtPrice <= maxPrice).ToList();
         }
         internal static async Task<r6_marketplace.Classes.Item.ItemPriceHistory?> GetItemPriceHistory(string itemId)
