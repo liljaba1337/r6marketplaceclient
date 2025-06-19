@@ -3,6 +3,18 @@
   "WorkspaceRootPath": "C:\\Users\\balls\\source\\repos\\r6marketplaceclient\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{A41FD4E1-5E4A-469C-B14D-89DC853AB23B}|r6marketplaceclient.csproj|c:\\users\\balls\\source\\repos\\r6marketplaceclient\\.gitignore||{3B902123-F8A7-4915-9F01-361F908088D0}",
+      "RelativeMoniker": "D:0:0:{A41FD4E1-5E4A-469C-B14D-89DC853AB23B}|r6marketplaceclient.csproj|solutionrelative:.gitignore||{3B902123-F8A7-4915-9F01-361F908088D0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A41FD4E1-5E4A-469C-B14D-89DC853AB23B}|r6marketplaceclient.csproj|c:\\users\\balls\\source\\repos\\r6marketplaceclient\\windows\\enhanceditemcard.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{A41FD4E1-5E4A-469C-B14D-89DC853AB23B}|r6marketplaceclient.csproj|solutionrelative:windows\\enhanceditemcard.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A41FD4E1-5E4A-469C-B14D-89DC853AB23B}|r6marketplaceclient.csproj|c:\\users\\balls\\source\\repos\\r6marketplaceclient\\windows\\enhanceditemcard.xaml||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{A41FD4E1-5E4A-469C-B14D-89DC853AB23B}|r6marketplaceclient.csproj|solutionrelative:windows\\enhanceditemcard.xaml||{8B382828-6202-11D1-8870-0000F87579D2}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{A41FD4E1-5E4A-469C-B14D-89DC853AB23B}|r6marketplaceclient.csproj|c:\\users\\balls\\source\\repos\\r6marketplaceclient\\windows\\enhanceditemcard.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A41FD4E1-5E4A-469C-B14D-89DC853AB23B}|r6marketplaceclient.csproj|solutionrelative:windows\\enhanceditemcard.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -11,16 +23,8 @@
       "RelativeMoniker": "D:0:0:{A41FD4E1-5E4A-469C-B14D-89DC853AB23B}|r6marketplaceclient.csproj|solutionrelative:converters\\nameraritycolorconverter.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A41FD4E1-5E4A-469C-B14D-89DC853AB23B}|r6marketplaceclient.csproj|c:\\users\\balls\\source\\repos\\r6marketplaceclient\\windows\\enhanceditemcard.xaml||{8B382828-6202-11D1-8870-0000F87579D2}",
-      "RelativeMoniker": "D:0:0:{A41FD4E1-5E4A-469C-B14D-89DC853AB23B}|r6marketplaceclient.csproj|solutionrelative:windows\\enhanceditemcard.xaml||{8B382828-6202-11D1-8870-0000F87579D2}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{A41FD4E1-5E4A-469C-B14D-89DC853AB23B}|r6marketplaceclient.csproj|c:\\users\\balls\\source\\repos\\r6marketplaceclient\\viewmodels\\purchasableitemviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A41FD4E1-5E4A-469C-B14D-89DC853AB23B}|r6marketplaceclient.csproj|solutionrelative:viewmodels\\purchasableitemviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A41FD4E1-5E4A-469C-B14D-89DC853AB23B}|r6marketplaceclient.csproj|c:\\users\\balls\\source\\repos\\r6marketplaceclient\\windows\\enhanceditemcard.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
-      "RelativeMoniker": "D:0:0:{A41FD4E1-5E4A-469C-B14D-89DC853AB23B}|r6marketplaceclient.csproj|solutionrelative:windows\\enhanceditemcard.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A41FD4E1-5E4A-469C-B14D-89DC853AB23B}|r6marketplaceclient.csproj|c:\\users\\balls\\source\\repos\\r6marketplaceclient\\apiclient.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -42,7 +46,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 8,
+          "SelectedChildIndex": 2,
           "Children": [
             {
               "$type": "Bookmark",
@@ -54,7 +58,20 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
+              "Title": ".gitignore",
+              "DocumentMoniker": "C:\\Users\\balls\\source\\repos\\r6marketplaceclient\\.gitignore",
+              "RelativeDocumentMoniker": ".gitignore",
+              "ToolTip": "C:\\Users\\balls\\source\\repos\\r6marketplaceclient\\.gitignore",
+              "RelativeToolTip": ".gitignore",
+              "ViewState": "AgIAABQAAAAAAAAAAAAEwBwAAAAEAAAAAAAAAA==",
+              "Icon": "00000000-0000-0000-0000-000000000000.000000|iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAF8SURBVDhPjVNLTgJBEG1lwpoFB3GNK9fieA48hD8iwT/ihwgSDAIHgAGXXsEV18CNzL/LquqZdsYM6kteXqcy3fWqpmpNRBgOhyABBEgpAFVKPIMUcYzUyOU\u002BXM/b2qtU3vkSfRjjZTCAMAw1A2LwzdFoBPP5HNqdzuL27n4juibWI\u002BUshBA1DIkhEx9iEorFotgslQqGYbxxAGFEqt1MxmPWJLbLZdZ\u002Bv89q5PMFPiTR6z2zdaxR0fXA0XTBcVywkb4fwHXjRteecIDNQ7UmExVYAdPcxYaqclN46na5WenMKjtlVnTYwcXlVYaDqImW9beD5N/TeGy32QHXm6hZ03ZgiSQHp2fnWQ4oBmJqWSqwAqZpZjt4aLXAD4J0VqyZsmoubfB8H2r1eoaD6NXZ9HcHO\u002BSA3f4AjifXl8rItOETM8ckB9WTWpYD9RdeZ1PWVWAHWXPQaDb59f/w8LiqHeh1pvGkCaP6qB8yXusoxmuNZ7XmII4O9vGuEF86osuDYRkpYQAAAABJRU5ErkJggg==",
+              "WhenOpened": "2025-06-19T10:10:18.929Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
               "Title": "NameRarityColorConverter.cs",
               "DocumentMoniker": "C:\\Users\\balls\\source\\repos\\r6marketplaceclient\\Converters\\NameRarityColorConverter.cs",
               "RelativeDocumentMoniker": "Converters\\NameRarityColorConverter.cs",
@@ -67,7 +84,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 7,
               "Title": "PriceChangeColorConverter.cs",
               "DocumentMoniker": "C:\\Users\\balls\\source\\repos\\r6marketplaceclient\\Converters\\PriceChangeColorConverter.cs",
               "RelativeDocumentMoniker": "Converters\\PriceChangeColorConverter.cs",
@@ -80,7 +97,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 5,
               "Title": "PurchasableItemViewModel.cs",
               "DocumentMoniker": "C:\\Users\\balls\\source\\repos\\r6marketplaceclient\\ViewModels\\PurchasableItemViewModel.cs",
               "RelativeDocumentMoniker": "ViewModels\\PurchasableItemViewModel.cs",
@@ -93,7 +110,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 8,
               "Title": "DesignTimeData.cs",
               "DocumentMoniker": "C:\\Users\\balls\\source\\repos\\r6marketplaceclient\\DesignTimeData.cs",
               "RelativeDocumentMoniker": "DesignTimeData.cs",
@@ -106,7 +123,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 6,
               "Title": "ApiClient.cs",
               "DocumentMoniker": "C:\\Users\\balls\\source\\repos\\r6marketplaceclient\\ApiClient.cs",
               "RelativeDocumentMoniker": "ApiClient.cs",
@@ -125,14 +142,14 @@
               "RelativeDocumentMoniker": "Windows\\EnhancedItemCard.xaml",
               "ToolTip": "C:\\Users\\balls\\source\\repos\\r6marketplaceclient\\Windows\\EnhancedItemCard.xaml",
               "RelativeToolTip": "Windows\\EnhancedItemCard.xaml",
-              "ViewState": "AgIAABUAAAAAAAAAAAAAAA8AAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAEAAAAAAAAAAAAwwBsAAAAeAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
               "WhenOpened": "2025-06-19T06:14:57.588Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 3,
               "Title": "EnhancedItemCard.xaml.cs",
               "DocumentMoniker": "C:\\Users\\balls\\source\\repos\\r6marketplaceclient\\Windows\\EnhancedItemCard.xaml.cs",
               "RelativeDocumentMoniker": "Windows\\EnhancedItemCard.xaml.cs",
@@ -166,7 +183,7 @@
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 1,
               "Title": "EnhancedItemCard.xaml",
               "DocumentMoniker": "C:\\Users\\balls\\source\\repos\\r6marketplaceclient\\Windows\\EnhancedItemCard.xaml",
               "RelativeDocumentMoniker": "Windows\\EnhancedItemCard.xaml",
