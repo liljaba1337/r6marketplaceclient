@@ -9,16 +9,42 @@ namespace r6marketplaceclient.ViewModels
 {
     public class PurchasableItemViewModel
     {
-        private readonly PurchasableItem _item;
+        internal readonly PurchasableItem _item;
 
-        public PurchasableItemViewModel(PurchasableItem item)
+        public PurchasableItemViewModel(PurchasableItem? item = null)
         {
-            _item = item;
+            _item = item!;
         }
 
         public Uri ImageUri => _item.AssetUrl.Value;
         public string Name => _item.Name;
-        public decimal? Price => _item.SellOrdersStats?.lowestPrice;
-        public string ItemId => _item.ID;
+        public int Price
+        {
+            get => _item.SellOrdersStats?.lowestPrice ?? -1; set => Price = value;
+        }
+        public int Volume => _item.SellOrdersStats?.activeCount ?? -1;
+        public double LastSold => _item.LastSoldAtPrice;
+        public string Rarity => _item.Tags.FirstOrDefault(x => x.StartsWith("rarity"), "default");
+        public double PriceChange
+        {
+            get => (Price - LastSold) / LastSold * 100; set => PriceChange = value;
+        }
+    }
+    public class ExtendedPurchasableItemViewModel : PurchasableItemViewModel
+    {
+        internal readonly ItemPriceHistory _history;
+        internal readonly ItemPriceHistory _history7;
+        public ExtendedPurchasableItemViewModel(PurchasableItem item, ItemPriceHistory history) : base(item)
+        {
+            _history = history;
+            _history7 = _history.Skip(Math.Max(0, _history.Count() - 7));
+        }
+        public double AveragePrice7 => Math.Round(_history7.Average);
+        public double AveragePrice30 => Math.Round(_history.Average);
+        public double AverageVolume7 => Math.Round(
+            _history7.Select(x => x.ItemsCount).ToList().Average());
+        public double AverageVolume30 => Math.Round(
+            _history.Select(x => x.ItemsCount).ToList().Average());
+        public int SoldYesterday => _history[0].ItemsCount;
     }
 }

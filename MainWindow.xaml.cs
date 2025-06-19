@@ -74,9 +74,9 @@ namespace r6marketplaceclient
 
         private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            await PrepareAndPerformSearch();
+            await PrepareAndPerformSearch(5);
         }
-        private async Task PrepareAndPerformSearch()
+        private async Task PrepareAndPerformSearch(int count = 500)
         {
             string type = typeFilterComboBox.SelectedItem?.ToString() ?? "All";
             List<string> tags = new List<string>();
@@ -90,12 +90,20 @@ namespace r6marketplaceclient
                 }
             }
 
-            await backend.PerformSearch(new List<string>(), "All", 0, 1000000, string.Empty);
+            await backend.PerformSearch(new List<string>(), "All", 0, 1000000, string.Empty, count);
         }
 
         private async void filterComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             await PrepareAndPerformSearch();
+        }
+
+        private void ItemCard_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (sender is Border border && border.DataContext is PurchasableItemViewModel item)
+            {
+                backend.ShowEnhancedItemCard(item);
+            }
         }
     }
 }

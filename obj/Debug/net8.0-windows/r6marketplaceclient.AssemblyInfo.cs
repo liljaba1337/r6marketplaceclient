@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("r6marketplaceclient")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+39ff3f2c6482039b1397fa7e8128073746780f00")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3dece764efaf91ba9a734e21e6e1d67d45b91196")]
 [assembly: System.Reflection.AssemblyProductAttribute("r6marketplaceclient")]
 [assembly: System.Reflection.AssemblyTitleAttribute("r6marketplaceclient")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

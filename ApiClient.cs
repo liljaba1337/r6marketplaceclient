@@ -24,7 +24,7 @@ namespace r6marketplaceclient
             client = new R6MarketplaceClient(new HttpClient(new HttpClientHandler
             {
                 Proxy = proxy,
-                UseProxy = true,
+                UseProxy = false,
                 AllowAutoRedirect = false
             }), settings[5]);
         }
