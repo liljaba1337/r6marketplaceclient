@@ -14,28 +14,24 @@ namespace r6marketplaceclient
     internal static class ApiClient
     {
         private static R6MarketplaceClient client;
-        private static readonly string[] settings;
         
         static ApiClient()
         {
-            settings = File.ReadAllLines("settings.txt");
-            WebProxy proxy = new WebProxy(settings[2]);
-            proxy.Credentials = new NetworkCredential(settings[3], settings[4]);
-            client = new R6MarketplaceClient(new HttpClient(new HttpClientHandler
-            {
-                Proxy = proxy,
-                UseProxy = false,
-                AllowAutoRedirect = false
-            }), settings[5]);
+            client = new R6MarketplaceClient();
         }
 
-        private static async Task TryAuth()
+        internal static async Task<bool> Authenticate(string email, string password)
         {
-            if (!client.isAuthenticated)
+            try
             {
-                string token = await client.Authenticate(settings[0], settings[1]);
-                Debug.WriteLine(token);
+                string token = await client.Authenticate(email, password);
             }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Authentication failed: {ex.Message}");
+                return false;
+            }
+            return true;
         }
 
         internal static async Task<List<r6_marketplace.Classes.Item.PurchasableItem>> Search(
@@ -47,7 +43,6 @@ namespace r6marketplaceclient
             int limit = 400,
             int offset = 0)
         {
-            await TryAuth();
             var items = await client.SearchEndpoints.SearchItemUnrestricted(name, types, tags,
                 r6_marketplace.Endpoints.SearchEndpoints.SortBy.PurchaseAvailaible,
                 r6_marketplace.Endpoints.SearchEndpoints.SortDirection.DESC, limit, offset, r6_marketplace.Utils.Data.Local.en);
@@ -56,7 +51,6 @@ namespace r6marketplaceclient
         }
         internal static async Task<r6_marketplace.Classes.Item.ItemPriceHistory?> GetItemPriceHistory(string itemId)
         {
-            await TryAuth();
             var history = await client.ItemInfoEndpoints.GetItemPriceHistory(itemId);
             return history;
         }

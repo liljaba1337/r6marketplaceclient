@@ -15,6 +15,7 @@ using System.Windows.Shapes;
 using r6_marketplace;
 using r6_marketplace.Classes.Item;
 using r6marketplaceclient.ViewModels;
+using r6marketplaceclient.Windows;
 
 namespace r6marketplaceclient
 {
@@ -72,11 +73,13 @@ namespace r6marketplaceclient
             }
         }
 
-        private async void Window_Loaded(object sender, RoutedEventArgs e)
+        private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            await PrepareAndPerformSearch(5);
+            Hide();
+            var login = new Login(this);
+            login.Show();
         }
-        private async Task PrepareAndPerformSearch(int count = 500)
+        internal async Task PrepareAndPerformSearch(int count = 500)
         {
             string type = typeFilterComboBox.SelectedItem?.ToString() ?? "All";
             List<string> tags = new List<string>();

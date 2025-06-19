@@ -9,7 +9,7 @@
         mc:Ignorable="d"
         Title="Rainbow Six Siege Marketplace Client" Height="525" Width="830"
         Background="#FF0D0D0D"
-        ResizeMode="CanMinimize" Loaded="Window_Loaded">
+        ResizeMode="CanMinimize" Loaded="Window_Loaded" >
     
     <Window.Resources>
         
@@ -126,7 +126,7 @@
                         <ItemsControl.ItemTemplate>
                             <DataTemplate DataType="{x:Type vm:PurchasableItemViewModel}">
                                 <Border BorderBrush="Gray" BorderThickness="1" Background="#1F1F1F" 
-                        Width="150" Height="174" Margin="5" MouseLeftButtonDown="ItemCard_MouseLeftButtonDown">
+                        Width="150" Height="174" Margin="5" MouseLeftButtonDown="ItemCard_MouseLeftButtonDown" >
                                     <StackPanel>
                                         <Image Source="{Binding ImageUri}" Height="100" Stretch="Uniform"/>
                                         <TextBlock Text="{Binding Name}" 
