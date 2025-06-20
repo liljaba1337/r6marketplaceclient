@@ -20,11 +20,13 @@ namespace r6marketplaceclient
             client = new R6MarketplaceClient();
         }
 
+        internal static void SetToken(string token) => client = new R6MarketplaceClient(token:token);
         internal static async Task<bool> Authenticate(string email, string password)
         {
             try
             {
                 string token = await client.Authenticate(email, password);
+                SecureStorage.Encrypt(email, password, token);
             }
             catch (Exception ex)
             {

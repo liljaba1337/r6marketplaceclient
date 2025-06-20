@@ -73,11 +73,42 @@ namespace r6marketplaceclient
             }
         }
 
-        private void Window_Loaded(object sender, RoutedEventArgs e)
+        private void TryAutoLogin()
         {
-            Hide();
-            var login = new Login(this);
-            login.Show();
+            var data = SecureStorage.Decrypt();
+            if (data != null && !string.IsNullOrEmpty(data.token)) ApiClient.SetToken(data.token);
+        }
+
+        private async void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            Debug.WriteLine("Window loaded, trying auto-login...");
+            TryAutoLogin();
+            try
+            {
+                await PrepareAndPerformSearch(10);
+            }
+            catch
+            {
+                var data = SecureStorage.Decrypt();
+                if (data != null && !string.IsNullOrEmpty(data.email) && !string.IsNullOrEmpty(data.password))
+                {
+                    bool success = await ApiClient.Authenticate(data.email, data.password);
+                    if (!success)
+                    {
+                        Login loginWindow = new Login(this);
+                        loginWindow.ShowDialog();
+                    }
+                    else
+                    {
+                        await PrepareAndPerformSearch(10);
+                    }
+                }
+                else
+                {
+                    Login loginWindow = new Login(this);
+                    loginWindow.ShowDialog();
+                }
+            }
         }
         internal async Task PrepareAndPerformSearch(int count = 500)
         {
