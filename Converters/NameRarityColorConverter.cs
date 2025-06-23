@@ -9,6 +9,25 @@ using System.Windows.Media;
 
 namespace r6marketplaceclient.Converters
 {
+    class CompileTimeRarityColorConverter
+    {
+        public static Color Convert(string rarity)
+        {
+            switch (rarity)
+            {
+                case "rarity_uncommon":
+                    return Color.FromRgb(0, 153, 0);
+                case "rarity_rare":
+                    return Color.FromRgb(0, 102, 204);
+                case "rarity_superrare":
+                    return Color.FromRgb(153, 0, 153);
+                case "rarity_legendary":
+                    return Color.FromRgb(255, 153, 0);
+                default:
+                    return Colors.White;
+            }
+        }
+    }
     class NameRarityColorConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)

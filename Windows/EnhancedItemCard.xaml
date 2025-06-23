@@ -17,6 +17,7 @@
     <Window.Resources>
         <converters:PriceChangeColorConverter x:Key="PriceChangeColorConverter"/>
         <converters:NameRarityColorConverter x:Key="NameRarityColorConverter"/>
+        <converters:NameRarityShadowColorConverter x:Key="NameRarityShadowColorConverter"/>
     </Window.Resources>
     
     <Grid>
@@ -34,7 +35,14 @@
                 <ColumnDefinition Width="50"/>
             </Grid.ColumnDefinitions>
             <Image Grid.Column="0" Source="{Binding ImageUri}" Width="40" Height="40" Margin="5"/>
-            <TextBlock Grid.Column="1" Text="{Binding Name}" Foreground="{Binding Rarity, Converter={StaticResource NameRarityColorConverter}}" FontSize="18" FontWeight="Bold" VerticalAlignment="Center" Margin="10,0"/>
+            <Label Grid.Column="1" Content="{Binding Name}" Foreground="{Binding Rarity, Converter={StaticResource NameRarityColorConverter}}"
+                       FontSize="40" FontFamily="pack://application:,,,/r6marketplaceclient;component/Resources/#Bebas Neue"
+                   VerticalAlignment="Center" Margin="10,-5,10,0" Height="50">
+                <Label.Effect>
+                    <DropShadowEffect BlurRadius="25" ShadowDepth="0" Opacity="1"
+                      Color="{Binding ShadowColor}"/>
+                </Label.Effect>
+            </Label>
             <Button Grid.Column="2" Content="X" Width="30" Height="30" Background="Transparent" Foreground="White" Click="Close_Click">
                 <Button.Style>
                     <Style TargetType="Button">
@@ -88,5 +96,9 @@
                 <scottplot:WpfPlot x:Name="PriceTrendPlot" Margin="5" Height="170"/>
             </StackPanel>
         </UserControl>
+
+        <Grid Grid.Row="3">
+            
+        </Grid>
     </Grid>
 </Window>

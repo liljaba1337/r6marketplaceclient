@@ -5,14 +5,60 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:r6marketplaceclient"
         xmlns:l="clr-namespace:r6marketplaceclient.CustomComponents"
+        xmlns:converters="clr-namespace:r6marketplaceclient.Converters"
         xmlns:vm="clr-namespace:r6marketplaceclient.ViewModels"
         mc:Ignorable="d"
         Title="Rainbow Six Siege Marketplace Client" Height="525" Width="830"
         Background="#FF0D0D0D"
-        ResizeMode="CanMinimize" Loaded="Window_Loaded" >
+        ResizeMode="CanMinimize" Loaded="Window_Loaded"
+        xmlns:design="clr-namespace:r6marketplaceclient.DesignTimeData"
+        d:DataContext="{d:DesignInstance Type=design:DesignTimePurchasableItemViewModelCollection, IsDesignTimeCreatable=True}" >
     
     <Window.Resources>
-        
+        <converters:PriceChangeColorConverter x:Key="PriceChangeColorConverter"/>
+        <converters:NameRarityColorConverter x:Key="NameRarityColorConverter"/>
+        <FontFamily x:Key="InterBlack">
+            pack://application:,,,/r6marketplaceclient;component/Resources/#Inter Black
+        </FontFamily>
+
+        <Geometry x:Key="StarGeometry">
+            M 9.5,0 L 12.5,5.5 19,6.5 14.5,11 15.5,17.5 9.5,14 3.5,17.5 4.5,11 0,6.5 6.5,5.5 Z
+        </Geometry>
+
+        <Geometry x:Key="FlagGeometry">
+            M 6.0097656 2 C 4.9143111 2 4.0097656 2.9025988 4.0097656 3.9980469 L 4 22 L 12 19 L 20 22 L 20 20.556641 L 20 4 C 20 2.9069372 19.093063 2 18 2 L 6.0097656 2 z
+        </Geometry>
+        <Style x:Key="StarToggleButtonStyle" TargetType="ToggleButton">
+            <Setter Property="Width" Value="15"/>
+            <Setter Property="Height" Value="15"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ToggleButton">
+                        <Border Background="{TemplateBinding Background}">
+                            <Path x:Name="StarPath"
+                                  Data="{StaticResource FlagGeometry}"
+                                  Stretch="Uniform"
+                                  Stroke="Gold"
+                                  StrokeThickness="2"
+                                  Fill="Transparent"
+                                  HorizontalAlignment="Center"
+                                  VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <!-- When IsChecked is true, fill the star -->
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="StarPath" Property="Fill" Value="Gold"/>
+                            </Trigger>
+                            <!-- Hover effect -->
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="StarPath" Property="Opacity" Value="0.8"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </Window.Resources>
     
     <Grid Margin="0,0,0,-16">
@@ -125,20 +171,116 @@
 
                         <ItemsControl.ItemTemplate>
                             <DataTemplate DataType="{x:Type vm:PurchasableItemViewModel}">
-                                <Border BorderBrush="Gray" BorderThickness="1" Background="#1F1F1F" 
-                        Width="150" Height="174" Margin="5" MouseLeftButtonDown="ItemCard_MouseLeftButtonDown" >
-                                    <StackPanel>
-                                        <Image Source="{Binding ImageUri}" Height="100" Stretch="Uniform"/>
-                                        <TextBlock Text="{Binding Name}" 
-                                   FontWeight="Bold" 
-                                   Foreground="White" 
-                                   TextAlignment="Center" Height="30"/>
-                                        
-                                        <TextBlock Text="{Binding Price}" 
-                                   Foreground="DarkGreen" 
-                                   HorizontalAlignment="Left"
-                                   Margin="10,0,0,0"/>
-                                    </StackPanel>
+                                <Border Width="150"
+                                    Height="190"
+                                    Margin="5"
+                                    Background="#FF060606"
+                                    CornerRadius="4"
+                                    MouseLeftButtonDown="ItemCard_MouseLeftButtonDown">
+                                    <Border.Effect>
+                                        <DropShadowEffect x:Name="shadowEffect"
+                                              Color="{Binding ShadowColor}"
+                                              BlurRadius="10"
+                                              ShadowDepth="0"
+                                              Opacity="0.5"/>
+                                    </Border.Effect>
+
+                                    <Border.Triggers>
+                                        <!-- MouseEnter Animation -->
+                                        <EventTrigger RoutedEvent="MouseEnter">
+                                            <BeginStoryboard>
+                                                <Storyboard>
+                                                    <DoubleAnimation Storyboard.TargetProperty="Effect.BlurRadius"
+                                     To="40" Duration="0:0:0.2"/>
+                                                    <DoubleAnimation Storyboard.TargetProperty="Effect.Opacity"
+                                     To="1" Duration="0:0:0.2"/>
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </EventTrigger>
+
+                                        <!-- MouseLeave Animation -->
+                                        <EventTrigger RoutedEvent="MouseLeave">
+                                            <BeginStoryboard>
+                                                <Storyboard>
+                                                    <DoubleAnimation Storyboard.TargetProperty="Effect.BlurRadius"
+                                     To="10" Duration="0:0:0.2"/>
+                                                    <DoubleAnimation Storyboard.TargetProperty="Effect.Opacity"
+                                     To="0.5" Duration="0:0:0.2"/>
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </EventTrigger>
+                                    </Border.Triggers>
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"
+                                            Text="{Binding Name}"
+                                            Margin="0,10,0,10"
+                                            Foreground="#FAFAFA" 
+                                            TextAlignment="Center" 
+                                            Height="15"
+                                            FontFamily="{StaticResource InterBlack}" />
+
+                                        <Image Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
+                                            Source="{Binding ImageUri}" 
+                                            Height="100" 
+                                            Stretch="Uniform"
+                                            HorizontalAlignment="Center">
+
+                                            <Image.OpacityMask>
+                                                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                                    <!-- Top edge transparent -->
+                                                    <GradientStop Color="#00FFFFFF" Offset="0.0" />
+                                                    <GradientStop Color="#FFFFFFFF" Offset="0.2" />
+
+                                                    <!-- Middle opaque -->
+                                                    <GradientStop Color="#FFFFFFFF" Offset="0.8" />
+
+                                                    <!-- Bottom edge transparent -->
+                                                    <GradientStop Color="#00FFFFFF" Offset="1.0" />
+                                                </LinearGradientBrush>
+                                            </Image.OpacityMask>
+                                        </Image>
+
+                                        <TextBlock Grid.Row="2" Grid.Column="0"
+                                            Text="Price change:" 
+                                            Foreground="#C5C4C4"
+                                            FontSize="9" 
+                                            Margin="10,0,0,0" 
+                                            HorizontalAlignment="Left"
+                                            FontFamily="{StaticResource InterBlack}"/>
+
+                                        <TextBlock Grid.Row="3" Grid.Column="0"
+                                            Text="{Binding PriceChange, StringFormat={}{0:+0.0;-0.0}%}"
+                                            Foreground="{Binding PriceChange, Converter={StaticResource PriceChangeColorConverter}}" 
+                                            HorizontalAlignment="Left"
+                                            Margin="10,0,0,0"
+                                            FontFamily="{StaticResource InterBlack}"/>
+
+                                        <TextBlock Grid.Row="4" Grid.Column="1"
+                                            Text="{Binding Price}" 
+                                            Foreground="#FAFAFA" 
+                                            FontSize="12"
+                                            HorizontalAlignment="Right" 
+                                            Margin="0,5,10,0"
+                                            FontFamily="{StaticResource InterBlack}"/>
+
+                                        <ToggleButton Grid.Row="4" Grid.Column="0"
+                                            Style="{StaticResource StarToggleButtonStyle}"
+                                            IsChecked="{Binding IsStarred}"
+                                            HorizontalAlignment="Left"
+                                            Margin="10,5,10,0"/>
+                                    </Grid>
                                 </Border>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>

@@ -9,6 +9,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Resources\BebasNeue-Regular.ttf" />
+    <None Remove="Resources\Inter-Black.otf" />
+    <None Remove="Resources\Inter_28pt-Bold.ttf" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="ScottPlot.WPF" Version="5.0.55" />
   </ItemGroup>
 
@@ -16,6 +22,11 @@
     <Reference Include="r6-marketplace">
       <HintPath>..\r6-marketplace\r6-marketplace\bin\Release\net8.0\r6-marketplace.dll</HintPath>
     </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Resources\BebasNeue-Regular.ttf" />
+    <Resource Include="Resources\Inter-Black.otf" />
   </ItemGroup>
 
 </Project>

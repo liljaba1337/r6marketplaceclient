@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using r6_marketplace;
 using r6_marketplace.Classes.Item;
+using r6_marketplace.Utils;
 using r6marketplaceclient.ViewModels;
 using r6marketplaceclient.Windows;
 
@@ -86,9 +87,12 @@ namespace r6marketplaceclient
             try
             {
                 await PrepareAndPerformSearch(10);
+                Debug.WriteLine("Search performed successfully.");
             }
-            catch
+            catch(Exception ex)
             {
+                Debug.WriteLine($"Error during search: {ex.Message}");
+
                 var data = SecureStorage.Decrypt();
                 if (data != null && !string.IsNullOrEmpty(data.email) && !string.IsNullOrEmpty(data.password))
                 {
@@ -112,7 +116,6 @@ namespace r6marketplaceclient
         }
         internal async Task PrepareAndPerformSearch(int count = 500)
         {
-            string type = typeFilterComboBox.SelectedItem?.ToString() ?? "All";
             List<string> tags = new List<string>();
 
             foreach (var comboBox in comboBoxes)
@@ -120,15 +123,26 @@ namespace r6marketplaceclient
                 if (comboBox.SelectedItem != null && comboBox.SelectedItem.ToString() != "All"
                     && comboBox.Name != "typeFilterComboBox")
                 {
-                    tags.Add(comboBox.SelectedItem.ToString()!);
+                    tags.Add(SearchTags.GetAPIName(comboBox.SelectedItem.ToString()!));
                 }
             }
 
-            await backend.PerformSearch(new List<string>(), "All", 0, 1000000, string.Empty, count);
+            await backend.PerformSearch(
+                tags,
+                typeFilterComboBox.SelectedItem?.ToString() ?? "All",
+                int.TryParse(minPriceTextBox.Text, out int res) ? res : 10,
+                int.TryParse(maxPriceTextBox.Text, out int res1) ? res1 : 10,
+                SearchBox.Text,
+                count
+            );
         }
 
         private async void filterComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if (sender is ComboBox comboBox && comboBox.SelectedItem != null)
+            {
+                Debug.WriteLine($"ComboBox {comboBox.Name} changed to {comboBox.SelectedItem}");
+            }
             await PrepareAndPerformSearch();
         }
 

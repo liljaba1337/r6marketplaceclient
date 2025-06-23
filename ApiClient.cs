@@ -17,10 +17,21 @@ namespace r6marketplaceclient
         
         static ApiClient()
         {
-            client = new R6MarketplaceClient();
+            InitializeClient();
         }
 
-        internal static void SetToken(string token) => client = new R6MarketplaceClient(token:token);
+        private static void InitializeClient(string? token = null)
+        {
+            client = new R6MarketplaceClient(token: token);
+            client.OnTokenRefreshed += (string oldToken, string newToken, DateTime expirationDate) =>
+            {
+                Debug.WriteLine($"Token refreshed: {oldToken} -> {newToken}, expires at {expirationDate}");
+                SecureStorage.Encrypt("token", newToken);
+            };
+            //client.SetupTokenRefreshing();
+        }
+
+        internal static void SetToken(string token) => InitializeClient(token);
         internal static async Task<bool> Authenticate(string email, string password)
         {
             try

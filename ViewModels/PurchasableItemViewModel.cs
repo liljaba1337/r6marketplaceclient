@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media;
 using r6_marketplace.Classes.Item;
+using r6marketplaceclient.Converters;
 
 namespace r6marketplaceclient.ViewModels
 {
@@ -14,10 +16,13 @@ namespace r6marketplaceclient.ViewModels
         public PurchasableItemViewModel(PurchasableItem? item = null)
         {
             _item = item!;
+            _item.AssetUrl.Width = 200;
         }
 
+        public bool IsStarred { get => false; set { } } // This should be bound to a property in the main view model
         public Uri ImageUri => _item.AssetUrl.Value;
         public string Name => _item.Name;
+        public Color ShadowColor => CompileTimeRarityColorConverter.Convert(Rarity);
         public int Price
         {
             get => _item.SellOrdersStats?.lowestPrice ?? -1; set => Price = value;

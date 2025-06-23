@@ -36,6 +36,7 @@ namespace r6marketplaceclient
                 maxPrice,
                 limit
             );
+            MainWindow.Items.Clear();
             foreach (var item in _items)
             {
                 MainWindow.Items.Add(new PurchasableItemViewModel(item));
