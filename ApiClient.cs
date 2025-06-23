@@ -53,6 +53,7 @@ namespace r6marketplaceclient
             List<string> types,
             int minPrice = 10,
             int maxPrice = 1000000,
+            bool onlyStars = false,
             int limit = 400,
             int offset = 0)
         {
@@ -60,7 +61,13 @@ namespace r6marketplaceclient
                 r6_marketplace.Endpoints.SearchEndpoints.SortBy.PurchaseAvailaible,
                 r6_marketplace.Endpoints.SearchEndpoints.SortDirection.DESC, limit, offset, r6_marketplace.Utils.Data.Local.en);
             Debug.WriteLine($"Found {items.Count} items matching the search criteria.");
-            return items.Where(item => item.LastSoldAtPrice >= minPrice && item.LastSoldAtPrice <= maxPrice).ToList();
+            var filtereditems = items.Where(item => item.LastSoldAtPrice >= minPrice && item.LastSoldAtPrice <= maxPrice).ToList();
+            if (onlyStars)
+            {
+                filtereditems = filtereditems.Where(item => ItemStarrer.IsItemStarred(item.ID)).ToList();
+                Debug.WriteLine($"Filtered to {filtereditems.Count} starred items.");
+            }
+            return filtereditems;
         }
         internal static async Task<r6_marketplace.Classes.Item.ItemPriceHistory?> GetItemPriceHistory(string itemId)
         {

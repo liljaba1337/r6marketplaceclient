@@ -29,7 +29,7 @@ namespace r6marketplaceclient
         private readonly MainPageBackend backend = new MainPageBackend();
 
         #region inotifyproperty stuff
-        public static ObservableCollection<PurchasableItemViewModel> Items { get; } = new();
+        public static ObservableCollection<PurchasableItemViewModel> Items { get; private set; } = new();
         public event PropertyChangedEventHandler? PropertyChanged;
         protected void OnPropertyChanged(string propertyName) =>
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
@@ -63,6 +63,7 @@ namespace r6marketplaceclient
         {
             InitializeComponent();
             SetupComponents();
+            ItemStarrer.LoadStarredItems();
             DataContext = this;
         }
 
@@ -133,6 +134,7 @@ namespace r6marketplaceclient
                 int.TryParse(minPriceTextBox.Text, out int res) ? res : 10,
                 int.TryParse(maxPriceTextBox.Text, out int res1) ? res1 : 10,
                 SearchBox.Text,
+                OnlyStarsCheck.IsChecked ?? false,
                 count
             );
         }
@@ -152,6 +154,11 @@ namespace r6marketplaceclient
             {
                 backend.ShowEnhancedItemCard(item);
             }
+        }
+
+        private async void OnlyStarsCheck_Click(object sender, RoutedEventArgs e)
+        {
+            await PrepareAndPerformSearch();
         }
     }
 }

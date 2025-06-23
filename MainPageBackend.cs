@@ -23,7 +23,7 @@ namespace r6marketplaceclient
             window.Show();
             window.Closed += (s, e) => visibleCards.Remove(item._item.ID);
         }
-        internal async Task PerformSearch(List<string> tags, string type, int minPrice, int maxPrice, string text, int limit)
+        internal async Task PerformSearch(List<string> tags, string type, int minPrice, int maxPrice, string text, bool onlyStars, int limit)
         {
             List<string> types = new List<string>();
             if (type != "All") types.Add(type);
@@ -34,6 +34,7 @@ namespace r6marketplaceclient
                 types,
                 minPrice,
                 maxPrice,
+                onlyStars,
                 limit
             );
             MainWindow.Items.Clear();

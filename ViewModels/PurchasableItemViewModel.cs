@@ -19,7 +19,17 @@ namespace r6marketplaceclient.ViewModels
             _item.AssetUrl.Width = 200;
         }
 
-        public bool IsStarred { get => false; set { } } // This should be bound to a property in the main view model
+        public bool IsStarred
+        {
+            get
+            {
+                return ItemStarrer.IsItemStarred(_item.ID);
+            }
+            set
+            {
+                ItemStarrer.ToggleStarItem(_item.ID, value);
+            }
+        }
         public Uri ImageUri => _item.AssetUrl.Value;
         public string Name => _item.Name;
         public Color ShadowColor => CompileTimeRarityColorConverter.Convert(Rarity);

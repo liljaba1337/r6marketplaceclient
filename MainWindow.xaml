@@ -8,7 +8,7 @@
         xmlns:converters="clr-namespace:r6marketplaceclient.Converters"
         xmlns:vm="clr-namespace:r6marketplaceclient.ViewModels"
         mc:Ignorable="d"
-        Title="Rainbow Six Siege Marketplace Client" Height="525" Width="830"
+        Title="Rainbow Six Siege Marketplace Client" Height="545" Width="830"
         Background="#FF0D0D0D"
         ResizeMode="CanMinimize" Loaded="Window_Loaded"
         xmlns:design="clr-namespace:r6marketplaceclient.DesignTimeData"
@@ -39,7 +39,7 @@
                             <Path x:Name="StarPath"
                                   Data="{StaticResource FlagGeometry}"
                                   Stretch="Uniform"
-                                  Stroke="Gold"
+                                  Stroke="#C5C4C4"
                                   StrokeThickness="2"
                                   Fill="Transparent"
                                   HorizontalAlignment="Center"
@@ -48,7 +48,7 @@
                         <ControlTemplate.Triggers>
                             <!-- When IsChecked is true, fill the star -->
                             <Trigger Property="IsChecked" Value="True">
-                                <Setter TargetName="StarPath" Property="Fill" Value="Gold"/>
+                                <Setter TargetName="StarPath" Property="Fill" Value="#C5C4C4"/>
                             </Trigger>
                             <!-- Hover effect -->
                             <Trigger Property="IsMouseOver" Value="True">
@@ -157,6 +157,8 @@
                         MaxLength="7"
                         />
                 </StackPanel>
+
+                <CheckBox x:Name="OnlyStarsCheck" Content="Only bookmarked" Foreground="#FF999A9B" Margin="5" Click="OnlyStarsCheck_Click" />
             </StackPanel>
 
             <!-- Main Items Area -->
@@ -176,6 +178,7 @@
                                     Margin="5"
                                     Background="#FF060606"
                                     CornerRadius="4"
+                                        Cursor="Hand"
                                     MouseLeftButtonDown="ItemCard_MouseLeftButtonDown">
                                     <Border.Effect>
                                         <DropShadowEffect x:Name="shadowEffect"
