@@ -23,7 +23,7 @@ namespace r6marketplaceclient
             window.Show();
             window.Closed += (s, e) => visibleCards.Remove(item._item.ID);
         }
-        internal async Task PerformSearch(List<string> tags, string type, int minPrice, int maxPrice, string text, bool onlyStars, int limit)
+        internal async Task<bool> PerformSearch(List<string> tags, string type, int minPrice, int maxPrice, string text, bool onlyStars, int limit)
         {
             List<string> types = new List<string>();
             if (type != "All") types.Add(type);
@@ -38,10 +38,12 @@ namespace r6marketplaceclient
                 limit
             );
             MainWindow.Items.Clear();
+            if (_items.Count == 0) return false;
             foreach (var item in _items)
             {
                 MainWindow.Items.Add(new PurchasableItemViewModel(item));
             }
+            return true;
         }
     }
 }

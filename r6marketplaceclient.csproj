@@ -12,6 +12,7 @@
     <None Remove="Resources\BebasNeue-Regular.ttf" />
     <None Remove="Resources\Inter-Black.otf" />
     <None Remove="Resources\Inter_28pt-Bold.ttf" />
+    <None Remove="Resources\noitems.jpg" />
   </ItemGroup>
 
   <ItemGroup>
@@ -27,6 +28,7 @@
   <ItemGroup>
     <Resource Include="Resources\BebasNeue-Regular.ttf" />
     <Resource Include="Resources\Inter-Black.otf" />
+    <Resource Include="Resources\noitems.jpg" />
   </ItemGroup>
 
 </Project>

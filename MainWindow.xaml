@@ -8,30 +8,33 @@
         xmlns:converters="clr-namespace:r6marketplaceclient.Converters"
         xmlns:vm="clr-namespace:r6marketplaceclient.ViewModels"
         mc:Ignorable="d"
-        Title="Rainbow Six Siege Marketplace Client" Height="545" Width="830"
+        Title="Rainbow Six Siege Marketplace Client"
+        Height="700"
+        Width="900"
         Background="#FF0D0D0D"
-        ResizeMode="CanMinimize" Loaded="Window_Loaded"
+        ResizeMode="CanMinimize"
+        Loaded="Window_Loaded"
         xmlns:design="clr-namespace:r6marketplaceclient.DesignTimeData"
-        d:DataContext="{d:DesignInstance Type=design:DesignTimePurchasableItemViewModelCollection, IsDesignTimeCreatable=True}" >
-    
+        d:DataContext="{d:DesignInstance Type=design:DesignTimePurchasableItemViewModelCollection, IsDesignTimeCreatable=True}">
+
     <Window.Resources>
-        <converters:PriceChangeColorConverter x:Key="PriceChangeColorConverter"/>
-        <converters:NameRarityColorConverter x:Key="NameRarityColorConverter"/>
+        <converters:PriceChangeColorConverter x:Key="PriceChangeColorConverter" />
+        <converters:NameRarityColorConverter x:Key="NameRarityColorConverter" />
         <FontFamily x:Key="InterBlack">
             pack://application:,,,/r6marketplaceclient;component/Resources/#Inter Black
         </FontFamily>
 
-        <Geometry x:Key="StarGeometry">
-            M 9.5,0 L 12.5,5.5 19,6.5 14.5,11 15.5,17.5 9.5,14 3.5,17.5 4.5,11 0,6.5 6.5,5.5 Z
-        </Geometry>
-
         <Geometry x:Key="FlagGeometry">
             M 6.0097656 2 C 4.9143111 2 4.0097656 2.9025988 4.0097656 3.9980469 L 4 22 L 12 19 L 20 22 L 20 20.556641 L 20 4 C 20 2.9069372 19.093063 2 18 2 L 6.0097656 2 z
         </Geometry>
-        <Style x:Key="StarToggleButtonStyle" TargetType="ToggleButton">
-            <Setter Property="Width" Value="15"/>
-            <Setter Property="Height" Value="15"/>
-            <Setter Property="Background" Value="Transparent"/>
+        <Style x:Key="StarToggleButtonStyle"
+               TargetType="ToggleButton">
+            <Setter Property="Width"
+                    Value="15" />
+            <Setter Property="Height"
+                    Value="15" />
+            <Setter Property="Background"
+                    Value="Transparent" />
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="ToggleButton">
@@ -43,16 +46,191 @@
                                   StrokeThickness="2"
                                   Fill="Transparent"
                                   HorizontalAlignment="Center"
-                                  VerticalAlignment="Center"/>
+                                  VerticalAlignment="Center" />
                         </Border>
                         <ControlTemplate.Triggers>
                             <!-- When IsChecked is true, fill the star -->
-                            <Trigger Property="IsChecked" Value="True">
-                                <Setter TargetName="StarPath" Property="Fill" Value="#C5C4C4"/>
+                            <Trigger Property="IsChecked"
+                                     Value="True">
+                                <Setter TargetName="StarPath"
+                                        Property="Fill"
+                                        Value="#C5C4C4" />
                             </Trigger>
                             <!-- Hover effect -->
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="StarPath" Property="Opacity" Value="0.8"/>
+                            <Trigger Property="IsMouseOver"
+                                     Value="True">
+                                <Setter TargetName="StarPath"
+                                        Property="Opacity"
+                                        Value="0.8" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="FilterComboBoxStyle"
+               TargetType="ComboBox">
+            <Setter Property="Background"
+                    Value="#FF343434" />
+            <Setter Property="Foreground"
+                    Value="#FAFAFA" />
+            <Setter Property="BorderBrush"
+                    Value="#FF555555" />
+            <Setter Property="BorderThickness"
+                    Value="1" />
+            <Setter Property="Height"
+                    Value="24" />
+            <Setter Property="Margin"
+                    Value="5,2,5,5" />
+            <Setter Property="FontFamily"
+                    Value="{StaticResource InterBlack}" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ComboBox">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="4">
+                            <Grid>
+                                <ToggleButton x:Name="ToggleButton"
+                                              IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                              Background="Transparent"
+                                              BorderBrush="Transparent"
+                                              HorizontalContentAlignment="Left"
+                                              VerticalContentAlignment="Center"
+                                              Padding="5,0,0,0">
+                                    <TextBlock x:Name="ContentSite"
+                                               Text="{TemplateBinding SelectionBoxItem}"
+                                               VerticalAlignment="Center"
+                                               HorizontalAlignment="Left"
+                                               Foreground="#FAFAFA">
+                                    </TextBlock>
+                                </ToggleButton>
+                                <Popup x:Name="Popup"
+                                       IsOpen="{TemplateBinding IsDropDownOpen}"
+                                       Placement="Bottom"
+                                       AllowsTransparency="True">
+                                    <Border Background="#FF343434"
+                                            BorderBrush="#FF555555"
+                                            BorderThickness="1"
+                                            CornerRadius="4"
+                                            MaxHeight="200">
+                                        <ScrollViewer>
+                                            <ItemsPresenter />
+                                        </ScrollViewer>
+                                    </Border>
+                                </Popup>
+                            </Grid>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver"
+                                     Value="True">
+                                <Setter Property="BorderBrush"
+                                        Value="#FF777777" />
+                                <Setter Property="Background"
+                                        Value="#FF3C3C3C" />
+                            </Trigger>
+                            <Trigger Property="IsFocused"
+                                     Value="True">
+                                <Setter Property="BorderBrush"
+                                        Value="#FF999999" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="FilterTextBoxStyle"
+               TargetType="TextBox">
+            <Setter Property="Background"
+                    Value="#FF343434" />
+            <Setter Property="Foreground"
+                    Value="#FAFAFA" />
+            <Setter Property="BorderBrush"
+                    Value="#FF555555" />
+            <Setter Property="BorderThickness"
+                    Value="1" />
+            <Setter Property="Height"
+                    Value="24" />
+            <Setter Property="Margin"
+                    Value="5,2,5,5" />
+            <Setter Property="Padding"
+                    Value="5,0,0,0" />
+            <Setter Property="FontFamily"
+                    Value="{StaticResource InterBlack}" />
+            <Setter Property="VerticalContentAlignment"
+                    Value="Center" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="4">
+                            <ScrollViewer x:Name="PART_ContentHost"
+                                          Margin="2" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver"
+                                     Value="True">
+                                <Setter Property="BorderBrush"
+                                        Value="#FF777777" />
+                                <Setter Property="Background"
+                                        Value="#FF3C3C3C" />
+                            </Trigger>
+                            <Trigger Property="IsFocused"
+                                     Value="True">
+                                <Setter Property="BorderBrush"
+                                        Value="#FF999999" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="FilterCheckBoxStyle"
+               TargetType="CheckBox">
+            <Setter Property="Foreground"
+                    Value="#FF999A9B" />
+            <Setter Property="Margin"
+                    Value="5,10,5,5" />
+            <Setter Property="FontFamily"
+                    Value="{StaticResource InterBlack}" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="CheckBox">
+                        <StackPanel Orientation="Horizontal">
+                            <Border x:Name="CheckBoxBorder"
+                                    Width="16"
+                                    Height="16"
+                                    Background="#FF343434"
+                                    BorderBrush="#FF555555"
+                                    BorderThickness="1"
+                                    CornerRadius="3">
+                                <Path x:Name="CheckMark"
+                                      Data="M 0,5 L 5,10 L 12,0"
+                                      Stroke="#FAFAFA"
+                                      StrokeThickness="2"
+                                      Visibility="Collapsed" />
+                            </Border>
+                            <ContentPresenter Margin="5,0,0,0"
+                                              VerticalAlignment="Center" />
+                        </StackPanel>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked"
+                                     Value="True">
+                                <Setter TargetName="CheckMark"
+                                        Property="Visibility"
+                                        Value="Visible" />
+                            </Trigger>
+                            <Trigger Property="IsMouseOver"
+                                     Value="True">
+                                <Setter TargetName="CheckBoxBorder"
+                                        Property="BorderBrush"
+                                        Value="#FF777777" />
+                                <Setter TargetName="CheckBoxBorder"
+                                        Property="Background"
+                                        Value="#FF3C3C3C" />
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -60,132 +238,185 @@
             </Setter>
         </Style>
     </Window.Resources>
-    
-    <Grid Margin="0,0,0,-16">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="498*"/>
-            <ColumnDefinition Width="33*"/>
-            <ColumnDefinition Width="269*"/>
-        </Grid.ColumnDefinitions>
+
+    <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="25" />
             <RowDefinition Height="*" />
-            <RowDefinition Height="24" />
         </Grid.RowDefinitions>
 
         <!-- Top Navigation Panel -->
-        <DockPanel Background="#FF141414" Grid.Row="0" Grid.ColumnSpan="3">
+        <DockPanel Background="#FF141414"
+                   Grid.Row="0"
+                   Grid.ColumnSpan="2">
 
         </DockPanel>
 
         <!-- Main Content -->
-        <Grid Grid.Row="1" Margin="0,0,0,10" Grid.RowSpan="2" Grid.ColumnSpan="3">
+        <Grid Grid.Row="1"
+              Margin="0,0,0,10">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="150" />
+                <ColumnDefinition Width="217" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
             <!-- Sidebar Filters -->
-            <StackPanel Grid.Column="0"
-                        Background="#FF0D0D0D"
-                        Margin="5,5,5,27"
-                        Orientation="Vertical">
+            <Border Grid.Column="0"
+                    Background="#FF141414"
+                    Margin="5"
+                    CornerRadius="4"
+                    BorderBrush="#FF555555"
+                    BorderThickness="1">
+                <Border.Effect>
+                    <DropShadowEffect Color="#FF000000"
+                                      BlurRadius="10"
+                                      ShadowDepth="0"
+                                      Opacity="0.5" />
+                </Border.Effect>
+                <StackPanel Orientation="Vertical"
+                            Margin="10">
+                    <TextBlock Text="Filters"
+                               FontSize="18"
+                               FontWeight="Bold"
+                               Foreground="#FAFAFA"
+                               FontFamily="{StaticResource InterBlack}"
+                               Margin="0,0,0,10" />
 
-                <TextBlock Text="Filters" FontSize="16" FontWeight="Bold" Foreground="#FF999A9B" Margin="0,0,0,0"/>
+                    <TextBox x:Name="SearchBox"
+                             KeyDown="SearchBox_KeyDown"
+                             Style="{StaticResource FilterTextBoxStyle}"
+                             Width="128" />
 
-                <TextBox x:Name="SearchBox"
-                     KeyDown="SearchBox_KeyDown"
-                     Margin="5"
-                     Width="128"
-                     Height="23"
-                     Background="#FF2B2E32"
-                     Foreground="#FF999A9B"
-                     BorderBrush="Transparent"
-                     l:TextBoxPlaceholder.Placeholder="Name"
-                     />
+                    <TextBlock Text="Weapon"
+                               Foreground="#FF999A9B"
+                               FontFamily="{StaticResource InterBlack}"
+                               Margin="5,10,0,2" />
+                    <ComboBox x:Name="weaponFilterComboBox"
+                              Style="{StaticResource FilterComboBoxStyle}" />
 
-                <TextBlock Text="Weapon:" Foreground="#FF91979C" Margin="0,10,0,2" />
-                <ComboBox x:Name="weaponFilterComboBox" Background="#FF343434" Foreground="White"
-                          />
+                    <TextBlock Text="Season"
+                               Foreground="#FF999A9B"
+                               FontFamily="{StaticResource InterBlack}"
+                               Margin="5,10,0,2" />
+                    <ComboBox x:Name="seasonFilterComboBox"
+                              Style="{StaticResource FilterComboBoxStyle}" />
 
-                <TextBlock Text="Season:" Foreground="#FF999A9B" Margin="0,10,0,2" />
-                <ComboBox x:Name="seasonFilterComboBox" Background="#FF343434" Foreground="White"
-                          />
+                    <TextBlock Text="Event"
+                               Foreground="#FF999A9B"
+                               FontFamily="{StaticResource InterBlack}"
+                               Margin="5,10,0,2" />
+                    <ComboBox x:Name="eventFilterComboBox"
+                              Style="{StaticResource FilterComboBoxStyle}" />
 
-                <TextBlock Text="Event:" Foreground="#FF999A9B" Margin="0,10,0,2" />
-                <ComboBox x:Name="eventFilterComboBox" Background="#FF343434" Foreground="White" 
-                          />
+                    <TextBlock Text="Type"
+                               Foreground="#FF999A9B"
+                               FontFamily="{StaticResource InterBlack}"
+                               Margin="5,10,0,2" />
+                    <ComboBox x:Name="typeFilterComboBox"
+                              Style="{StaticResource FilterComboBoxStyle}" />
 
-                <TextBlock Text="Type:" Foreground="#FF999A9B" Margin="0,10,0,2" />
-                <ComboBox x:Name="typeFilterComboBox" Background="#FF343434" Foreground="White"
-                          />
+                    <TextBlock Text="Rarity"
+                               Foreground="#FF999A9B"
+                               FontFamily="{StaticResource InterBlack}"
+                               Margin="5,10,0,2" />
+                    <ComboBox x:Name="rarityFilterComboBox"
+                              Style="{StaticResource FilterComboBoxStyle}" />
 
-                <TextBlock Text="Rarity:" Foreground="#FF999A9B" Margin="0,10,0,2" />
-                <ComboBox x:Name="rarityFilterComboBox" Background="#FF343434" Foreground="White"
-                          />
+                    <TextBlock Text="Operator"
+                               Foreground="#FF999A9B"
+                               FontFamily="{StaticResource InterBlack}"
+                               Margin="5,10,0,2" />
+                    <ComboBox x:Name="operatorFilterComboBox"
+                              Style="{StaticResource FilterComboBoxStyle}" />
 
-                <TextBlock Text="Operator:" Foreground="#FF999A9B" Margin="0,10,0,2" />
-                <ComboBox x:Name="operatorFilterComboBox" Background="#FF343434" Foreground="White"
-                          />
+                    <TextBlock Text="Esports Team"
+                               Foreground="#FF999A9B"
+                               FontFamily="{StaticResource InterBlack}"
+                               Margin="5,10,0,2" />
+                    <ComboBox x:Name="teamFilterComboBox"
+                              Style="{StaticResource FilterComboBoxStyle}" />
 
-                <TextBlock Text="Esports team:" Foreground="#FF999A9B" Margin="0,10,0,2" />
-                <ComboBox x:Name="teamFilterComboBox" Background="#FF343434" Foreground="White"
-                          />
+                    <TextBlock Text="Price Range"
+                               Foreground="#FF999A9B"
+                               FontFamily="{StaticResource InterBlack}"
+                               Margin="5,10,0,2" />
+                    <Border Background="#FF343434"
+                            CornerRadius="4"
+                            Padding="5"
+                            Margin="5,2,5,5">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBox x:Name="minPriceTextBox"
+                                     Style="{StaticResource FilterTextBoxStyle}"
+                                     Width="65"
+                                     Text="10"
+                                     HorizontalContentAlignment="Center"
+                                     MaxLength="7" />
+                            <TextBlock Text="-"
+                                       Foreground="#FF999A9B"
+                                       FontFamily="{StaticResource InterBlack}"
+                                       VerticalAlignment="Center"
+                                       Margin="5,0" />
+                            <TextBox x:Name="maxPriceTextBox"
+                                     Style="{StaticResource FilterTextBoxStyle}"
+                                     Width="65"
+                                     Text="1000000"
+                                     HorizontalContentAlignment="Center"
+                                     MaxLength="7" />
+                        </StackPanel>
+                    </Border>
 
-                <TextBlock Text="Price range:" Foreground="#FF999A9B" Margin="0,15,0,2"/>
-                <StackPanel Orientation="Horizontal">
-                    <TextBox x:Name="minPriceTextBox"
-                        Height="20"
-                        Width="57"
-                        Text="10"
-                        Margin="0,0,5,0"
-                        Background="#FF343434"
-                        Foreground="White"
-                        BorderBrush="{x:Null}"
-                        HorizontalContentAlignment="Center"
-                        MaxLength="7"
-                    />
-                    <Label Content="-" Height="20" Width="15" Foreground="#FF999A9B" Margin="0,-10,5,0"/>
-                    <TextBox x:Name="maxPriceTextBox"
-                        Width="57"
-                        Height="20"
-                        Text="1000000"
-                        Background="#FF343434"
-                        Foreground="White"
-                        BorderBrush="{x:Null}"
-                        HorizontalContentAlignment="Center"
-                        MaxLength="7"
-                        />
+                    <CheckBox x:Name="OnlyStarsCheck"
+                              Content="Only bookmarked"
+                              Style="{StaticResource FilterCheckBoxStyle}"
+                              Click="OnlyStarsCheck_Click" />
                 </StackPanel>
-
-                <CheckBox x:Name="OnlyStarsCheck" Content="Only bookmarked" Foreground="#FF999A9B" Margin="5" Click="OnlyStarsCheck_Click" />
-            </StackPanel>
+            </Border>
 
             <!-- Main Items Area -->
-            <StackPanel Grid.Column="1" Background="#FF100F0F" Margin="0,0,0,27">
-                <ScrollViewer VerticalScrollBarVisibility="Auto" Height="400" x:Name="scrollViewer">
-                    <ItemsControl ItemsSource="{Binding Items}" x:Name="itemsControl">
+            <StackPanel Grid.Column="1"
+                        Background="#FF100F0F"
+                        Margin="0,0,0,5">
+                <StackPanel x:Name="NoItemsPlaceholder"
+                            VerticalAlignment="Center"
+                            Visibility="Collapsed">
+                    <TextBlock Text="No items found"
+                               FontFamily="{StaticResource InterBlack}"
+                               FontSize="36"
+                               Foreground="#FF999A9B"
+                               TextAlignment="Center"
+                               Margin="70" />
+                    <Image Source="/r6marketplaceclient;component/Resources/noitems.jpg"
+                           Width="300"
+                           Height="300"
+                           Stretch="Fill"
+                           Margin="0,0,0,10" />
+                </StackPanel>
+                <ScrollViewer VerticalScrollBarVisibility="Auto"
+                              x:Name="scrollViewer"
+                              Height="644">
+                    <ItemsControl ItemsSource="{Binding Items}"
+                                  x:Name="itemsControl">
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
-                                <WrapPanel IsItemsHost="True"/>
+                                <WrapPanel IsItemsHost="True" />
                             </ItemsPanelTemplate>
                         </ItemsControl.ItemsPanel>
 
                         <ItemsControl.ItemTemplate>
                             <DataTemplate DataType="{x:Type vm:PurchasableItemViewModel}">
                                 <Border Width="150"
-                                    Height="190"
-                                    Margin="5"
-                                    Background="#FF060606"
-                                    CornerRadius="4"
+                                        Height="190"
+                                        Margin="5"
+                                        Background="#FF060606"
+                                        CornerRadius="4"
                                         Cursor="Hand"
-                                    MouseLeftButtonDown="ItemCard_MouseLeftButtonDown">
+                                        MouseLeftButtonDown="ItemCard_MouseLeftButtonDown">
                                     <Border.Effect>
                                         <DropShadowEffect x:Name="shadowEffect"
-                                              Color="{Binding ShadowColor}"
-                                              BlurRadius="10"
-                                              ShadowDepth="0"
-                                              Opacity="0.5"/>
+                                                          Color="{Binding ShadowColor}"
+                                                          BlurRadius="10"
+                                                          ShadowDepth="0"
+                                                          Opacity="0.5" />
                                     </Border.Effect>
 
                                     <Border.Triggers>
@@ -194,9 +425,11 @@
                                             <BeginStoryboard>
                                                 <Storyboard>
                                                     <DoubleAnimation Storyboard.TargetProperty="Effect.BlurRadius"
-                                     To="40" Duration="0:0:0.2"/>
+                                                                     To="40"
+                                                                     Duration="0:0:0.2" />
                                                     <DoubleAnimation Storyboard.TargetProperty="Effect.Opacity"
-                                     To="1" Duration="0:0:0.2"/>
+                                                                     To="1"
+                                                                     Duration="0:0:0.2" />
                                                 </Storyboard>
                                             </BeginStoryboard>
                                         </EventTrigger>
@@ -206,83 +439,98 @@
                                             <BeginStoryboard>
                                                 <Storyboard>
                                                     <DoubleAnimation Storyboard.TargetProperty="Effect.BlurRadius"
-                                     To="10" Duration="0:0:0.2"/>
+                                                                     To="10"
+                                                                     Duration="0:0:0.2" />
                                                     <DoubleAnimation Storyboard.TargetProperty="Effect.Opacity"
-                                     To="0.5" Duration="0:0:0.2"/>
+                                                                     To="0.5"
+                                                                     Duration="0:0:0.2" />
                                                 </Storyboard>
                                             </BeginStoryboard>
                                         </EventTrigger>
                                     </Border.Triggers>
                                     <Grid>
                                         <Grid.RowDefinitions>
-                                            <RowDefinition Height="Auto"/>
-                                            <RowDefinition Height="Auto"/>
-                                            <RowDefinition Height="Auto"/>
-                                            <RowDefinition Height="Auto"/>
-                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="Auto" />
                                         </Grid.RowDefinitions>
                                         <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*"/>
-                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="Auto" />
                                         </Grid.ColumnDefinitions>
 
-                                        <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"
-                                            Text="{Binding Name}"
-                                            Margin="0,10,0,10"
-                                            Foreground="#FAFAFA" 
-                                            TextAlignment="Center" 
-                                            Height="15"
-                                            FontFamily="{StaticResource InterBlack}" />
+                                        <TextBlock Grid.Row="0"
+                                                   Grid.Column="0"
+                                                   Grid.ColumnSpan="2"
+                                                   Text="{Binding Name}"
+                                                   Margin="0,10,0,10"
+                                                   Foreground="#FAFAFA"
+                                                   TextAlignment="Center"
+                                                   Height="15"
+                                                   FontFamily="{StaticResource InterBlack}" />
 
-                                        <Image Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
-                                            Source="{Binding ImageUri}" 
-                                            Height="100" 
-                                            Stretch="Uniform"
-                                            HorizontalAlignment="Center">
+                                        <Image Grid.Row="1"
+                                               Grid.Column="0"
+                                               Grid.ColumnSpan="2"
+                                               Source="{Binding ImageUri}"
+                                               Height="100"
+                                               Stretch="Uniform"
+                                               HorizontalAlignment="Center">
 
                                             <Image.OpacityMask>
-                                                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                                <LinearGradientBrush StartPoint="0,0"
+                                                                     EndPoint="0,1">
                                                     <!-- Top edge transparent -->
-                                                    <GradientStop Color="#00FFFFFF" Offset="0.0" />
-                                                    <GradientStop Color="#FFFFFFFF" Offset="0.2" />
+                                                    <GradientStop Color="#00FFFFFF"
+                                                                  Offset="0.0" />
+                                                    <GradientStop Color="#FFFFFFFF"
+                                                                  Offset="0.2" />
 
                                                     <!-- Middle opaque -->
-                                                    <GradientStop Color="#FFFFFFFF" Offset="0.8" />
+                                                    <GradientStop Color="#FFFFFFFF"
+                                                                  Offset="0.8" />
 
                                                     <!-- Bottom edge transparent -->
-                                                    <GradientStop Color="#00FFFFFF" Offset="1.0" />
+                                                    <GradientStop Color="#00FFFFFF"
+                                                                  Offset="1.0" />
                                                 </LinearGradientBrush>
                                             </Image.OpacityMask>
                                         </Image>
 
-                                        <TextBlock Grid.Row="2" Grid.Column="0"
-                                            Text="Price change:" 
-                                            Foreground="#C5C4C4"
-                                            FontSize="9" 
-                                            Margin="10,0,0,0" 
-                                            HorizontalAlignment="Left"
-                                            FontFamily="{StaticResource InterBlack}"/>
+                                        <TextBlock Grid.Row="2"
+                                                   Grid.Column="0"
+                                                   Text="Price change:"
+                                                   Foreground="#C5C4C4"
+                                                   FontSize="9"
+                                                   Margin="10,0,0,0"
+                                                   HorizontalAlignment="Left"
+                                                   FontFamily="{StaticResource InterBlack}" />
 
-                                        <TextBlock Grid.Row="3" Grid.Column="0"
-                                            Text="{Binding PriceChange, StringFormat={}{0:+0.0;-0.0}%}"
-                                            Foreground="{Binding PriceChange, Converter={StaticResource PriceChangeColorConverter}}" 
-                                            HorizontalAlignment="Left"
-                                            Margin="10,0,0,0"
-                                            FontFamily="{StaticResource InterBlack}"/>
+                                        <TextBlock Grid.Row="3"
+                                                   Grid.Column="0"
+                                                   Text="{Binding PriceChange, StringFormat={}{0:+0.0;-0.0}%}"
+                                                   Foreground="{Binding PriceChange, Converter={StaticResource PriceChangeColorConverter}}"
+                                                   HorizontalAlignment="Left"
+                                                   Margin="10,0,0,0"
+                                                   FontFamily="{StaticResource InterBlack}" />
 
-                                        <TextBlock Grid.Row="4" Grid.Column="1"
-                                            Text="{Binding Price}" 
-                                            Foreground="#FAFAFA" 
-                                            FontSize="12"
-                                            HorizontalAlignment="Right" 
-                                            Margin="0,5,10,0"
-                                            FontFamily="{StaticResource InterBlack}"/>
+                                        <TextBlock Grid.Row="4"
+                                                   Grid.Column="1"
+                                                   Text="{Binding Price}"
+                                                   Foreground="#FAFAFA"
+                                                   FontSize="12"
+                                                   HorizontalAlignment="Right"
+                                                   Margin="0,5,10,0"
+                                                   FontFamily="{StaticResource InterBlack}" />
 
-                                        <ToggleButton Grid.Row="4" Grid.Column="0"
-                                            Style="{StaticResource StarToggleButtonStyle}"
-                                            IsChecked="{Binding IsStarred}"
-                                            HorizontalAlignment="Left"
-                                            Margin="10,5,10,0"/>
+                                        <ToggleButton Grid.Row="4"
+                                                      Grid.Column="0"
+                                                      Style="{StaticResource StarToggleButtonStyle}"
+                                                      IsChecked="{Binding IsStarred}"
+                                                      HorizontalAlignment="Left"
+                                                      Margin="10,5,10,0" />
                                     </Grid>
                                 </Border>
                             </DataTemplate>
@@ -291,7 +539,5 @@
                 </ScrollViewer>
             </StackPanel>
         </Grid>
-
     </Grid>
-
 </Window>

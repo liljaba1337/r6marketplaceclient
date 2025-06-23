@@ -128,15 +128,16 @@ namespace r6marketplaceclient
                 }
             }
 
-            await backend.PerformSearch(
+            bool found = await backend.PerformSearch(
                 tags,
                 typeFilterComboBox.SelectedItem?.ToString() ?? "All",
                 int.TryParse(minPriceTextBox.Text, out int res) ? res : 10,
-                int.TryParse(maxPriceTextBox.Text, out int res1) ? res1 : 10,
+                int.TryParse(maxPriceTextBox.Text, out int res1) ? res1 : 1000000,
                 SearchBox.Text,
                 OnlyStarsCheck.IsChecked ?? false,
                 count
             );
+            NoItemsPlaceholder.Visibility = !found ? Visibility.Visible : Visibility.Collapsed;
         }
 
         private async void filterComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)

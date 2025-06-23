@@ -18,6 +18,12 @@
         <converters:PriceChangeColorConverter x:Key="PriceChangeColorConverter"/>
         <converters:NameRarityColorConverter x:Key="NameRarityColorConverter"/>
         <converters:NameRarityShadowColorConverter x:Key="NameRarityShadowColorConverter"/>
+        <FontFamily x:Key="InterBlack">
+            pack://application:,,,/r6marketplaceclient;component/Resources/#Inter Black
+        </FontFamily>
+        <Style TargetType="ToolTip">
+            <Setter Property="ToolTipService.InitialShowDelay" Value="0"/>
+        </Style>
     </Window.Resources>
     
     <Grid>
@@ -34,10 +40,16 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="50"/>
             </Grid.ColumnDefinitions>
-            <Image Grid.Column="0" Source="{Binding ImageUri}" Width="40" Height="40" Margin="5"/>
+            <Image Grid.Column="0" Source="{Binding ImageUri}" Width="40" Height="40" Margin="5">
+                <Image.ToolTip>
+                    <ToolTip>
+                        <Image Source="{Binding ImageUri}" Width="200" Height="200" />
+                    </ToolTip>
+                </Image.ToolTip>
+            </Image>
             <Label Grid.Column="1" Content="{Binding Name}" Foreground="{Binding Rarity, Converter={StaticResource NameRarityColorConverter}}"
-                       FontSize="40" FontFamily="pack://application:,,,/r6marketplaceclient;component/Resources/#Bebas Neue"
-                   VerticalAlignment="Center" Margin="10,-5,10,0" Height="50">
+                       FontSize="40" FontFamily="{StaticResource InterBlack}"
+                   VerticalAlignment="Center" Margin="0,-5,0,0" Height="50" HorizontalAlignment="Center">
                 <Label.Effect>
                     <DropShadowEffect BlurRadius="25" ShadowDepth="0" Opacity="1"
                       Color="{Binding ShadowColor}"/>

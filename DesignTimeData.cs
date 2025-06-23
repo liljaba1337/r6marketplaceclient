@@ -15,7 +15,25 @@ namespace r6marketplaceclient.DesignTimeData
         {
             new DesignTimePurchasableItemViewModel(),
             new DesignTimePurchasableItemViewModel() {ImageUri = new Uri("https://ubiservices.cdn.ubi.com/0d2ae42d-4c27-4cb7-af6c-2099062302bb/DeployerAssetsJune2023/02143738_7e78_0d62_f5e3_41458fa33730.png"),
-            ShadowColor = Converters.CompileTimeRarityColorConverter.Convert("rarity_legendary"), PriceChange = 234, IsStarred = true}
+            ShadowColor = Converters.CompileTimeRarityColorConverter.Convert("rarity_legendary"), PriceChange = 234, IsStarred = true},
+            new DesignTimePurchasableItemViewModel(),
+            new DesignTimePurchasableItemViewModel(),
+            new DesignTimePurchasableItemViewModel(),
+            new DesignTimePurchasableItemViewModel(),
+            new DesignTimePurchasableItemViewModel(),
+            new DesignTimePurchasableItemViewModel(),
+            new DesignTimePurchasableItemViewModel(),
+            new DesignTimePurchasableItemViewModel(),
+            new DesignTimePurchasableItemViewModel(),
+            new DesignTimePurchasableItemViewModel(),
+            new DesignTimePurchasableItemViewModel(),
+            new DesignTimePurchasableItemViewModel(),
+            new DesignTimePurchasableItemViewModel(),
+            new DesignTimePurchasableItemViewModel(),
+            new DesignTimePurchasableItemViewModel(),
+            new DesignTimePurchasableItemViewModel(),
+            new DesignTimePurchasableItemViewModel(),
+            new DesignTimePurchasableItemViewModel()
         };
     }
     public class DesignTimePurchasableItemViewModel
@@ -23,8 +41,8 @@ namespace r6marketplaceclient.DesignTimeData
         public DesignTimePurchasableItemViewModel()
         {
         }
-        public string Name { get; } = "Design Time Item";
-        public Uri ImageUri { get; set; } = new Uri("https://sun9-64.userapi.com/impg/ECQvGgCHxC2UDs_fThPTfkvmV3j65qOWwYQ3Lw/gEIwIhTWS-k.jpg?size=604x583&quality=95&sign=f0ca10aeb8a1ee097419e519458bd497&type=album");
+        public string Name { get; } = "DESIGN TIME ITEM";
+        public Uri ImageUri { get; set; } = new Uri("https://cdn.sendmeyourfeet.pics/uploads/4a46zq84a6rcl38jjqlz.jpg");
         public bool IsStarred { get; set; } = false;
         public double Price { get; set; } = 19.99;
         public double AveragePrice7 { get; } = 19.99;
