@@ -31,6 +31,7 @@
         <Geometry x:Key="FlagGeometry">
             M 6.0097656 2 C 4.9143111 2 4.0097656 2.9025988 4.0097656 3.9980469 L 4 22 L 12 19 L 20 22 L 20 20.556641 L 20 4 C 20 2.9069372 19.093063 2 18 2 L 6.0097656 2 z
         </Geometry>
+        <SolidColorBrush x:Key="AccentColor">#00FFB7</SolidColorBrush>
         <Style x:Key="StarToggleButtonStyle"
                TargetType="ToggleButton">
             <Setter Property="Width"
@@ -46,7 +47,7 @@
                             <Path x:Name="StarPath"
                                   Data="{StaticResource FlagGeometry}"
                                   Stretch="Uniform"
-                                  Stroke="#C5C4C4"
+                                  Stroke="{DynamicResource AccentColor}"
                                   StrokeThickness="2"
                                   Fill="Transparent"
                                   HorizontalAlignment="Center"
@@ -58,7 +59,7 @@
                                      Value="True">
                                 <Setter TargetName="StarPath"
                                         Property="Fill"
-                                        Value="#C5C4C4" />
+                                        Value="{DynamicResource AccentColor}" />
                             </Trigger>
                             <!-- Hover effect -->
                             <Trigger Property="IsMouseOver"
@@ -99,7 +100,7 @@
                                 <ToggleButton x:Name="ToggleButton"
                                               IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
                                               Background="Transparent"
-                                              BorderBrush="Transparent"
+                                              BorderBrush="{DynamicResource AccentColor}"
                                               HorizontalContentAlignment="Left"
                                               VerticalContentAlignment="Center"
                                               Padding="5,0,0,0">
@@ -151,7 +152,7 @@
             <Setter Property="Foreground"
                     Value="#FAFAFA" />
             <Setter Property="BorderBrush"
-                    Value="#FF555555" />
+                    Value="{DynamicResource AccentColor}" />
             <Setter Property="BorderThickness"
                     Value="1" />
             <Setter Property="Height"
@@ -208,12 +209,12 @@
                                     Width="16"
                                     Height="16"
                                     Background="#FF343434"
-                                    BorderBrush="#FF555555"
+                                    BorderBrush="{DynamicResource AccentColor}"
                                     BorderThickness="1"
                                     CornerRadius="3">
                                 <Path x:Name="CheckMark"
                                       Data="M 0,5 L 5,10 L 12,0"
-                                      Stroke="#FAFAFA"
+                                      Stroke="{DynamicResource AccentColor}"
                                       StrokeThickness="2"
                                       Visibility="Collapsed" />
                             </Border>
@@ -349,7 +350,7 @@
                     Background="#FF141414"
                     Margin="5"
                     CornerRadius="4"
-                    BorderBrush="#FF555555"
+                    BorderBrush="{DynamicResource AccentColor}"
                     BorderThickness="1">
                 <Border.Effect>
                     <DropShadowEffect Color="#FF000000"
@@ -426,6 +427,8 @@
                                Margin="5,10,0,2" />
                     <Border Background="#FF343434"
                             CornerRadius="4"
+                            BorderBrush="{DynamicResource AccentColor}"
+                            BorderThickness=".7"
                             Padding="5"
                             Margin="5,2,5,5">
                         <StackPanel Orientation="Horizontal">
@@ -476,7 +479,7 @@
                 </StackPanel>
                 <ScrollViewer VerticalScrollBarVisibility="Auto"
                               x:Name="scrollViewer"
-                              Height="644" >
+                              Height="644">
                     <StackPanel>
                         <ItemsControl ItemsSource="{Binding Items}"
                                       x:Name="itemsControl">
@@ -494,6 +497,7 @@
                                             Background="#FF060606"
                                             CornerRadius="4"
                                             Cursor="Hand"
+                                            ClipToBounds="False"
                                             MouseLeftButtonDown="ItemCard_MouseLeftButtonDown">
                                         <Border.Effect>
                                             <DropShadowEffect x:Name="shadowEffect"
@@ -624,7 +628,7 @@
                                 Style="{StaticResource LoadMoreButtonStyle}"
                                 HorizontalAlignment="Center"
                                 Click="LoadMoreButton_Click" />
-                        
+
                         <!-- Padding -->
                         <Rectangle Height="40"
                                    Fill="Transparent" />

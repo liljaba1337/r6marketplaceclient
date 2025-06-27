@@ -121,7 +121,7 @@ namespace r6marketplaceclient
                 }
             }
         }
-        internal async Task PrepareAndPerformSearch(int offset = 0, bool clearItems = true)
+        internal async Task PrepareAndPerformSearch(int offset = 0, bool clearItems = true, int count = 40)
         {
             List<string> tags = new List<string>();
 
@@ -141,11 +141,12 @@ namespace r6marketplaceclient
                 int.TryParse(maxPriceTextBox.Text, out int res1) ? res1 : 1000000,
                 SearchBox.Text,
                 OnlyStarsCheck.IsChecked ?? false,
+                count,
                 offset,
                 clearItems
             );
-            NoItemsPlaceholder.Visibility = !found ? Visibility.Visible : Visibility.Collapsed;
-            LoadMoreButton.Visibility = found && Items.Count > 0 ? Visibility.Visible : Visibility.Collapsed;
+            NoItemsPlaceholder.Visibility = !found && clearItems ? Visibility.Visible : Visibility.Collapsed;
+            LoadMoreButton.Visibility = count == 500 || (found && Items.Count > 0) ? Visibility.Visible : Visibility.Collapsed;
         }
 
         private async void filterComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -154,7 +155,7 @@ namespace r6marketplaceclient
             {
                 Debug.WriteLine($"ComboBox {comboBox.Name} changed to {comboBox.SelectedItem}");
             }
-            await PrepareAndPerformSearch();
+            await PrepareAndPerformSearch(count: OnlyStarsCheck.IsChecked == true ? 500 : 40);
         }
 
         private void ItemCard_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -167,13 +168,14 @@ namespace r6marketplaceclient
 
         private async void OnlyStarsCheck_Click(object sender, RoutedEventArgs e)
         {
-            await PrepareAndPerformSearch();
+            offset = 0;
+            await PrepareAndPerformSearch(count: OnlyStarsCheck.IsChecked == true ? 500 : 40);
         }
 
         private async void LoadMoreButton_Click(object sender, RoutedEventArgs e)
         {
-            offset += 40;
-            await PrepareAndPerformSearch(offset, false);
+            offset += OnlyStarsCheck.IsChecked == true ? 500 : 40;
+            await PrepareAndPerformSearch(offset, false, OnlyStarsCheck.IsChecked == true ? 500 : 40);
         }
     }
 }

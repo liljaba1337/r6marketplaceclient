@@ -24,14 +24,14 @@
         <Style TargetType="ToolTip">
             <Setter Property="ToolTipService.InitialShowDelay" Value="0"/>
         </Style>
+        
     </Window.Resources>
     
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="50" />
             <RowDefinition Height="150" />
-            <RowDefinition Height="200" />
-            <RowDefinition Height="50" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
         <Grid Grid.Row="0" Background="#151B1C" MouseDown="Header_MouseDown">
@@ -81,6 +81,7 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="40"/>
             </Grid.ColumnDefinitions>
             <StackPanel Grid.Column="0">
                 <TextBlock FontSize="16" FontWeight="Bold" Margin="0,5">
@@ -101,11 +102,81 @@
                 <TextBlock Text="{Binding AverageVolume30, StringFormat=Avg 30-day Volume: {0}}" Foreground="#B0B0B0" FontSize="14" Margin="0,5"/>
                 <TextBlock Text="{Binding SoldYesterday, StringFormat=Yesterday Volume: {0}}" Foreground="#B0B0B0" FontSize="12" Margin="0,5"/>
             </StackPanel>
+            <Grid Grid.Column="2">
+                <Button x:Name="BuyButton"
+                        Width="30"
+                        Height="30"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        VerticalAlignment="Bottom"
+                        HorizontalAlignment="Center"
+                        Margin="0,0,0,10"
+                        BorderBrush="#00FFB7"
+                        Cursor="Hand"
+                        Click="BuyButton_Click">
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Setter Property="Background"
+                                    Value="Transparent" />
+                            <Setter Property="BorderBrush"
+                                    Value="Transparent" />
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="Button">
+                                        <Border Background="{TemplateBinding Background}"
+                                                BorderBrush="{TemplateBinding BorderBrush}"
+                                                BorderThickness="{TemplateBinding BorderThickness}">
+                                            <ContentPresenter HorizontalAlignment="Center"
+                                                              VerticalAlignment="Center" />
+                                        </Border>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                            <Setter Property="Effect">
+                                <Setter.Value>
+                                    <DropShadowEffect BlurRadius="30"
+                                                      ShadowDepth="0"
+                                                      Color="#00FFB7"
+                                                      Opacity=".8" />
+                                </Setter.Value>
+                            </Setter>
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver"
+                                         Value="True">
+                                    <Setter Property="Background">
+                                        <Setter.Value>
+                                            <SolidColorBrush Color="Transparent" />
+                                        </Setter.Value>
+                                    </Setter>
+                                    <Setter Property="Effect">
+                                        <Setter.Value>
+                                            <DropShadowEffect BlurRadius="30"
+                                                              ShadowDepth="0"
+                                                              Color="#00FFB7"
+                                                              Opacity="1" />
+                                        </Setter.Value>
+                                    </Setter>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                    <Viewbox Width="25"
+                             Height="25">
+                        <Canvas Width="902.86"
+                                Height="825.641">
+                            <Path Fill="#00FFB7"
+                                  Data="M671.504,577.829l110.485-432.609H902.86v-68H729.174L703.128,179.2L0,178.697l74.753,399.129h596.751V577.829z M685.766,247.188l-67.077,262.64H131.199L81.928,246.756L685.766,247.188z" />
+                            <Path Fill="#00FFB7"
+                                  Data="M578.418,825.641c59.961,0,108.743-48.783,108.743-108.744s-48.782-108.742-108.743-108.742H168.717c-59.961,0-108.744,48.781-108.744,108.742s48.782,108.744,108.744,108.744c59.962,0,108.743-48.783,108.743-108.744c0-14.4-2.821-28.152-7.927-40.742h208.069c-5.107,12.59-7.928,26.342-7.928,40.742C469.675,776.858,518.457,825.641,578.418,825.641z M209.46,716.897c0,22.467-18.277,40.744-40.743,40.744c-22.466,0-40.744-18.277-40.744-40.744c0-22.465,18.277-40.742,40.744-40.742C191.183,676.155,209.46,694.432,209.46,716.897z M619.162,716.897c0,22.467-18.277,40.744-40.743,40.744s-40.743-18.277-40.743-40.744c0-22.465,18.277-40.742,40.743-40.742S619.162,694.432,619.162,716.897z" />
+                        </Canvas>
+                    </Viewbox>
+                </Button>
+            </Grid>
         </Grid>
 
         <UserControl Grid.Row="2" Background="#14191A" BorderBrush="#00FFB7" BorderThickness="1" Margin="10">
             <StackPanel>
-                <scottplot:WpfPlot x:Name="PriceTrendPlot" Margin="5" Height="170"/>
+                <scottplot:WpfPlot x:Name="PriceTrendPlot" Margin="5" Height="220"/>
             </StackPanel>
         </UserControl>
 

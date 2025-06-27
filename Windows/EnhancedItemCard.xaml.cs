@@ -135,5 +135,10 @@ namespace r6marketplaceclient.Windows
 
             PriceTrendPlot.Refresh();
         }
+
+        private async void BuyButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

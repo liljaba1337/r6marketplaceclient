@@ -9,6 +9,7 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Effects;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
@@ -24,6 +25,7 @@ namespace r6marketplaceclient.Windows
         {
             _mainWindow = window;
             InitializeComponent();
+            loginButton.IsEnabled = false;
         }
 
         private void whyButton_Click(object sender, RoutedEventArgs e)
@@ -38,8 +40,22 @@ namespace r6marketplaceclient.Windows
 
         private void UpdateLoginButtonState()
         {
-            if (emailBox.Text.Count() > 0 && passwordBox.Password.Count() > 0) loginButton.IsEnabled = true;
-            else loginButton.IsEnabled = false;
+            if (emailBox.Text.Count() > 0 && passwordBox.Password.Count() > 0)
+            {
+                loginButton.IsEnabled = true;
+                loginButton.Effect = new DropShadowEffect
+                {
+                    Color = Color.FromRgb(0, 255, 249),
+                    BlurRadius = 20,
+                    ShadowDepth = 0,
+                    Opacity = 0.7
+                };
+            }
+            else
+            {
+                loginButton.IsEnabled = false;
+                loginButton.Effect = null;
+            }
         }
 
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e) => UpdateLoginButtonState();
