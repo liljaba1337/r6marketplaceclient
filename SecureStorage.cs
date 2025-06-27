@@ -9,8 +9,14 @@ using System.Threading.Tasks;
 
 namespace r6marketplaceclient
 {
-    internal class SecureStorageFormat
+    internal class SecureStorageFormat : IDisposable
     {
+        public void Dispose()
+        {
+            email = null;
+            password = null;
+            token = null;
+        }
         public string? email { get; set; }
         public string? password { get; set; }
         public string? token { get; set; }
@@ -27,7 +33,7 @@ namespace r6marketplaceclient
         }
         internal static void Encrypt(string email, string password, string token)
         {
-            SecureStorageFormat secureStorageFormat = new SecureStorageFormat
+            using SecureStorageFormat secureStorageFormat = new SecureStorageFormat
             {
                 email = email,
                 password = password,
@@ -40,7 +46,7 @@ namespace r6marketplaceclient
         }
         internal static void Encrypt(string field, string data)
         {
-            SecureStorageFormat secureStorageFormat = Decrypt() ?? new SecureStorageFormat();
+            using SecureStorageFormat secureStorageFormat = Decrypt() ?? new SecureStorageFormat();
             switch (field)
             {
                 case "email":

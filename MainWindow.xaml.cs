@@ -25,8 +25,10 @@ namespace r6marketplaceclient
     /// </summary>
     public partial class MainWindow : Window, INotifyPropertyChanged
     {
+        private int offset = 0;
         private readonly List<ComboBox> comboBoxes = new List<ComboBox>();
         private readonly MainPageBackend backend = new MainPageBackend();
+        public static MainWindowFooterViewModel FooterViewModel { get; set; } = new MainWindowFooterViewModel();
 
         #region inotifyproperty stuff
         public static ObservableCollection<PurchasableItemViewModel> Items { get; private set; } = new();
@@ -34,6 +36,14 @@ namespace r6marketplaceclient
         protected void OnPropertyChanged(string propertyName) =>
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         #endregion
+
+        public MainWindow()
+        {
+            InitializeComponent();
+            SetupComponents();
+            ItemStarrer.LoadStarredItems();
+            DataContext = this;
+        }
 
         private void InitComboBox<TEnum>(ComboBox comboBox) where TEnum : Enum
         {
@@ -58,13 +68,7 @@ namespace r6marketplaceclient
             InitComboBox<r6_marketplace.Utils.SearchTags.Rarity>(rarityFilterComboBox);
             InitComboBox<r6_marketplace.Utils.SearchTags.Season>(seasonFilterComboBox);
             InitComboBox<r6_marketplace.Utils.SearchTags.Type>(typeFilterComboBox);
-        }
-        public MainWindow()
-        {
-            InitializeComponent();
-            SetupComponents();
-            ItemStarrer.LoadStarredItems();
-            DataContext = this;
+            LoadMoreButton.Visibility = Visibility.Collapsed;
         }
 
         private async void SearchBox_KeyDown(object sender, KeyEventArgs e)
@@ -77,7 +81,7 @@ namespace r6marketplaceclient
 
         private void TryAutoLogin()
         {
-            var data = SecureStorage.Decrypt();
+            using var data = SecureStorage.Decrypt();
             if (data != null && !string.IsNullOrEmpty(data.token)) ApiClient.SetToken(data.token);
         }
 
@@ -87,16 +91,17 @@ namespace r6marketplaceclient
             TryAutoLogin();
             try
             {
-                await PrepareAndPerformSearch(10);
+                await PrepareAndPerformSearch();
                 Debug.WriteLine("Search performed successfully.");
             }
             catch(Exception ex)
             {
                 Debug.WriteLine($"Error during search: {ex.Message}");
 
-                var data = SecureStorage.Decrypt();
+                using SecureStorageFormat? data = SecureStorage.Decrypt();
                 if (data != null && !string.IsNullOrEmpty(data.email) && !string.IsNullOrEmpty(data.password))
                 {
+                    Debug.WriteLine("Attempting to reauthenticate with stored credentials");
                     bool success = await ApiClient.Authenticate(data.email, data.password);
                     if (!success)
                     {
@@ -105,17 +110,18 @@ namespace r6marketplaceclient
                     }
                     else
                     {
-                        await PrepareAndPerformSearch(10);
+                        await PrepareAndPerformSearch();
                     }
                 }
                 else
                 {
+                    Debug.WriteLine("Showing login window.");
                     Login loginWindow = new Login(this);
                     loginWindow.ShowDialog();
                 }
             }
         }
-        internal async Task PrepareAndPerformSearch(int count = 500)
+        internal async Task PrepareAndPerformSearch(int offset = 0, bool clearItems = true)
         {
             List<string> tags = new List<string>();
 
@@ -135,9 +141,11 @@ namespace r6marketplaceclient
                 int.TryParse(maxPriceTextBox.Text, out int res1) ? res1 : 1000000,
                 SearchBox.Text,
                 OnlyStarsCheck.IsChecked ?? false,
-                count
+                offset,
+                clearItems
             );
             NoItemsPlaceholder.Visibility = !found ? Visibility.Visible : Visibility.Collapsed;
+            LoadMoreButton.Visibility = found && Items.Count > 0 ? Visibility.Visible : Visibility.Collapsed;
         }
 
         private async void filterComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -160,6 +168,12 @@ namespace r6marketplaceclient
         private async void OnlyStarsCheck_Click(object sender, RoutedEventArgs e)
         {
             await PrepareAndPerformSearch();
+        }
+
+        private async void LoadMoreButton_Click(object sender, RoutedEventArgs e)
+        {
+            offset += 40;
+            await PrepareAndPerformSearch(offset, false);
         }
     }
 }

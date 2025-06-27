@@ -23,10 +23,12 @@ namespace r6marketplaceclient
             window.Show();
             window.Closed += (s, e) => visibleCards.Remove(item._item.ID);
         }
-        internal async Task<bool> PerformSearch(List<string> tags, string type, int minPrice, int maxPrice, string text, bool onlyStars, int limit)
+        internal async Task<bool> PerformSearch(List<string> tags, string type, int minPrice, int maxPrice, string text, bool onlyStars, int offset, bool clearItems)
         {
             List<string> types = new List<string>();
             if (type != "All") types.Add(type);
+
+            MainWindow.FooterViewModel.Balance = await ApiClient.GetBalance();
 
             List<PurchasableItem> _items = await ApiClient.Search(
                 text,
@@ -35,9 +37,10 @@ namespace r6marketplaceclient
                 minPrice,
                 maxPrice,
                 onlyStars,
-                limit
+                40,
+                offset
             );
-            MainWindow.Items.Clear();
+            if (clearItems) MainWindow.Items.Clear();
             if (_items.Count == 0) return false;
             foreach (var item in _items)
             {

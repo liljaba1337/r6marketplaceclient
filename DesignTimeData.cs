@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Media;
 using r6marketplaceclient.ViewModels;
 
@@ -11,19 +12,16 @@ namespace r6marketplaceclient.DesignTimeData
 {
     public class DesignTimePurchasableItemViewModelCollection
     {
+        public MainWindowFooterViewModel FooterViewModel { get; set; } = new MainWindowFooterViewModel
+        {
+            Username = "Design Time User",
+            Balance = 80085
+        };
         public ObservableCollection<DesignTimePurchasableItemViewModel> Items { get; set; } = new ObservableCollection<DesignTimePurchasableItemViewModel>
         {
             new DesignTimePurchasableItemViewModel(),
             new DesignTimePurchasableItemViewModel() {ImageUri = new Uri("https://ubiservices.cdn.ubi.com/0d2ae42d-4c27-4cb7-af6c-2099062302bb/DeployerAssetsJune2023/02143738_7e78_0d62_f5e3_41458fa33730.png"),
             ShadowColor = Converters.CompileTimeRarityColorConverter.Convert("rarity_legendary"), PriceChange = 234, IsStarred = true},
-            new DesignTimePurchasableItemViewModel(),
-            new DesignTimePurchasableItemViewModel(),
-            new DesignTimePurchasableItemViewModel(),
-            new DesignTimePurchasableItemViewModel(),
-            new DesignTimePurchasableItemViewModel(),
-            new DesignTimePurchasableItemViewModel(),
-            new DesignTimePurchasableItemViewModel(),
-            new DesignTimePurchasableItemViewModel(),
             new DesignTimePurchasableItemViewModel(),
             new DesignTimePurchasableItemViewModel(),
             new DesignTimePurchasableItemViewModel(),

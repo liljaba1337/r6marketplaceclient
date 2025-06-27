@@ -47,6 +47,8 @@ namespace r6marketplaceclient
             return true;
         }
 
+        internal static async Task<int> GetBalance() => await client.AccountEndpoints.GetBalance();
+
         internal static async Task<List<r6_marketplace.Classes.Item.PurchasableItem>> Search(
             string name,
             List<string> tags,

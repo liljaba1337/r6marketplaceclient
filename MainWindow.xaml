@@ -9,7 +9,7 @@
         xmlns:vm="clr-namespace:r6marketplaceclient.ViewModels"
         mc:Ignorable="d"
         Title="Rainbow Six Siege Marketplace Client"
-        Height="700"
+        Height="710"
         Width="900"
         Background="#FF0D0D0D"
         ResizeMode="CanMinimize"
@@ -24,6 +24,10 @@
             pack://application:,,,/r6marketplaceclient;component/Resources/#Inter Black
         </FontFamily>
 
+        <Style TargetType="TextBlock">
+            <Setter Property="FontFamily"
+                    Value="{StaticResource InterBlack}" />
+        </Style>
         <Geometry x:Key="FlagGeometry">
             M 6.0097656 2 C 4.9143111 2 4.0097656 2.9025988 4.0097656 3.9980469 L 4 22 L 12 19 L 20 22 L 20 20.556641 L 20 4 C 20 2.9069372 19.093063 2 18 2 L 6.0097656 2 z
         </Geometry>
@@ -237,12 +241,92 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        <Style x:Key="LoadMoreButtonStyle"
+               TargetType="Button">
+            <Setter Property="Background"
+                    Value="#FF343434" />
+            <Setter Property="Foreground"
+                    Value="#FAFAFA" />
+            <Setter Property="BorderBrush"
+                    Value="#FF555555" />
+            <Setter Property="BorderThickness"
+                    Value="1" />
+            <Setter Property="FontFamily"
+                    Value="{StaticResource InterBlack}" />
+            <Setter Property="FontSize"
+                    Value="14" />
+            <Setter Property="Padding"
+                    Value="10,5" />
+            <Setter Property="Margin"
+                    Value="5,10,5,5" />
+            <Setter Property="Width"
+                    Value="128" />
+            <Setter Property="Height"
+                    Value="30" />
+            <Setter Property="Cursor"
+                    Value="Hand" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="ButtonBorder"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="4">
+                            <Border.Effect>
+                                <DropShadowEffect Color="#FF000000"
+                                                  BlurRadius="10"
+                                                  ShadowDepth="0"
+                                                  Opacity="0.5" />
+                            </Border.Effect>
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver"
+                                     Value="True">
+                                <Setter TargetName="ButtonBorder"
+                                        Property="Background"
+                                        Value="#FF3C3C3C" />
+                                <Setter TargetName="ButtonBorder"
+                                        Property="BorderBrush"
+                                        Value="#FF777777" />
+                            </Trigger>
+                            <Trigger Property="IsPressed"
+                                     Value="True">
+                                <Setter TargetName="ButtonBorder"
+                                        Property="Background"
+                                        Value="#FF2B2E32" />
+                                <Setter Property="RenderTransform">
+                                    <Setter.Value>
+                                        <ScaleTransform ScaleX="0.98"
+                                                        ScaleY="0.98" />
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                            <Trigger Property="IsEnabled"
+                                     Value="False">
+                                <Setter TargetName="ButtonBorder"
+                                        Property="Background"
+                                        Value="#FF2B2E32" />
+                                <Setter TargetName="ButtonBorder"
+                                        Property="BorderBrush"
+                                        Value="#FF444444" />
+                                <Setter Property="Opacity"
+                                        Value="0.5" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </Window.Resources>
 
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="25" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="20" />
         </Grid.RowDefinitions>
 
         <!-- Top Navigation Panel -->
@@ -380,7 +464,6 @@
                             VerticalAlignment="Center"
                             Visibility="Collapsed">
                     <TextBlock Text="No items found"
-                               FontFamily="{StaticResource InterBlack}"
                                FontSize="36"
                                Foreground="#FF999A9B"
                                TextAlignment="Center"
@@ -393,151 +476,180 @@
                 </StackPanel>
                 <ScrollViewer VerticalScrollBarVisibility="Auto"
                               x:Name="scrollViewer"
-                              Height="644">
-                    <ItemsControl ItemsSource="{Binding Items}"
-                                  x:Name="itemsControl">
-                        <ItemsControl.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <WrapPanel IsItemsHost="True" />
-                            </ItemsPanelTemplate>
-                        </ItemsControl.ItemsPanel>
+                              Height="644" >
+                    <StackPanel>
+                        <ItemsControl ItemsSource="{Binding Items}"
+                                      x:Name="itemsControl">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapPanel IsItemsHost="True" />
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
 
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate DataType="{x:Type vm:PurchasableItemViewModel}">
-                                <Border Width="150"
-                                        Height="190"
-                                        Margin="5"
-                                        Background="#FF060606"
-                                        CornerRadius="4"
-                                        Cursor="Hand"
-                                        MouseLeftButtonDown="ItemCard_MouseLeftButtonDown">
-                                    <Border.Effect>
-                                        <DropShadowEffect x:Name="shadowEffect"
-                                                          Color="{Binding ShadowColor}"
-                                                          BlurRadius="10"
-                                                          ShadowDepth="0"
-                                                          Opacity="0.5" />
-                                    </Border.Effect>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate DataType="{x:Type vm:PurchasableItemViewModel}">
+                                    <Border Width="150"
+                                            Height="190"
+                                            Margin="5"
+                                            Background="#FF060606"
+                                            CornerRadius="4"
+                                            Cursor="Hand"
+                                            MouseLeftButtonDown="ItemCard_MouseLeftButtonDown">
+                                        <Border.Effect>
+                                            <DropShadowEffect x:Name="shadowEffect"
+                                                              Color="{Binding ShadowColor}"
+                                                              BlurRadius="10"
+                                                              ShadowDepth="0"
+                                                              Opacity="0.5" />
+                                        </Border.Effect>
 
-                                    <Border.Triggers>
-                                        <!-- MouseEnter Animation -->
-                                        <EventTrigger RoutedEvent="MouseEnter">
-                                            <BeginStoryboard>
-                                                <Storyboard>
-                                                    <DoubleAnimation Storyboard.TargetProperty="Effect.BlurRadius"
-                                                                     To="40"
-                                                                     Duration="0:0:0.2" />
-                                                    <DoubleAnimation Storyboard.TargetProperty="Effect.Opacity"
-                                                                     To="1"
-                                                                     Duration="0:0:0.2" />
-                                                </Storyboard>
-                                            </BeginStoryboard>
-                                        </EventTrigger>
+                                        <Border.Triggers>
+                                            <!-- MouseEnter Animation -->
+                                            <EventTrigger RoutedEvent="MouseEnter">
+                                                <BeginStoryboard>
+                                                    <Storyboard>
+                                                        <DoubleAnimation Storyboard.TargetProperty="Effect.BlurRadius"
+                                                                         To="40"
+                                                                         Duration="0:0:0.2" />
+                                                        <DoubleAnimation Storyboard.TargetProperty="Effect.Opacity"
+                                                                         To="1"
+                                                                         Duration="0:0:0.2" />
+                                                    </Storyboard>
+                                                </BeginStoryboard>
+                                            </EventTrigger>
 
-                                        <!-- MouseLeave Animation -->
-                                        <EventTrigger RoutedEvent="MouseLeave">
-                                            <BeginStoryboard>
-                                                <Storyboard>
-                                                    <DoubleAnimation Storyboard.TargetProperty="Effect.BlurRadius"
-                                                                     To="10"
-                                                                     Duration="0:0:0.2" />
-                                                    <DoubleAnimation Storyboard.TargetProperty="Effect.Opacity"
-                                                                     To="0.5"
-                                                                     Duration="0:0:0.2" />
-                                                </Storyboard>
-                                            </BeginStoryboard>
-                                        </EventTrigger>
-                                    </Border.Triggers>
-                                    <Grid>
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="Auto" />
-                                            <RowDefinition Height="Auto" />
-                                            <RowDefinition Height="Auto" />
-                                            <RowDefinition Height="Auto" />
-                                            <RowDefinition Height="Auto" />
-                                        </Grid.RowDefinitions>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*" />
-                                            <ColumnDefinition Width="Auto" />
-                                        </Grid.ColumnDefinitions>
+                                            <!-- MouseLeave Animation -->
+                                            <EventTrigger RoutedEvent="MouseLeave">
+                                                <BeginStoryboard>
+                                                    <Storyboard>
+                                                        <DoubleAnimation Storyboard.TargetProperty="Effect.BlurRadius"
+                                                                         To="10"
+                                                                         Duration="0:0:0.2" />
+                                                        <DoubleAnimation Storyboard.TargetProperty="Effect.Opacity"
+                                                                         To="0.5"
+                                                                         Duration="0:0:0.2" />
+                                                    </Storyboard>
+                                                </BeginStoryboard>
+                                            </EventTrigger>
+                                        </Border.Triggers>
+                                        <Grid>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="Auto" />
+                                                <RowDefinition Height="Auto" />
+                                                <RowDefinition Height="Auto" />
+                                                <RowDefinition Height="Auto" />
+                                                <RowDefinition Height="Auto" />
+                                            </Grid.RowDefinitions>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="Auto" />
+                                            </Grid.ColumnDefinitions>
 
-                                        <TextBlock Grid.Row="0"
+                                            <TextBlock Grid.Row="0"
+                                                       Grid.Column="0"
+                                                       Grid.ColumnSpan="2"
+                                                       Text="{Binding Name}"
+                                                       Margin="0,10,0,10"
+                                                       Foreground="#FAFAFA"
+                                                       TextAlignment="Center"
+                                                       Height="15"
+                                                       FontFamily="{StaticResource InterBlack}" />
+
+                                            <Image Grid.Row="1"
                                                    Grid.Column="0"
                                                    Grid.ColumnSpan="2"
-                                                   Text="{Binding Name}"
-                                                   Margin="0,10,0,10"
-                                                   Foreground="#FAFAFA"
-                                                   TextAlignment="Center"
-                                                   Height="15"
-                                                   FontFamily="{StaticResource InterBlack}" />
+                                                   Source="{Binding ImageUri}"
+                                                   Height="100"
+                                                   Stretch="Uniform"
+                                                   HorizontalAlignment="Center">
 
-                                        <Image Grid.Row="1"
-                                               Grid.Column="0"
-                                               Grid.ColumnSpan="2"
-                                               Source="{Binding ImageUri}"
-                                               Height="100"
-                                               Stretch="Uniform"
-                                               HorizontalAlignment="Center">
+                                                <Image.OpacityMask>
+                                                    <LinearGradientBrush StartPoint="0,0"
+                                                                         EndPoint="0,1">
+                                                        <!-- Top edge transparent -->
+                                                        <GradientStop Color="#00FFFFFF"
+                                                                      Offset="0.0" />
+                                                        <GradientStop Color="#FFFFFFFF"
+                                                                      Offset="0.2" />
 
-                                            <Image.OpacityMask>
-                                                <LinearGradientBrush StartPoint="0,0"
-                                                                     EndPoint="0,1">
-                                                    <!-- Top edge transparent -->
-                                                    <GradientStop Color="#00FFFFFF"
-                                                                  Offset="0.0" />
-                                                    <GradientStop Color="#FFFFFFFF"
-                                                                  Offset="0.2" />
+                                                        <!-- Middle opaque -->
+                                                        <GradientStop Color="#FFFFFFFF"
+                                                                      Offset="0.8" />
 
-                                                    <!-- Middle opaque -->
-                                                    <GradientStop Color="#FFFFFFFF"
-                                                                  Offset="0.8" />
+                                                        <!-- Bottom edge transparent -->
+                                                        <GradientStop Color="#00FFFFFF"
+                                                                      Offset="1.0" />
+                                                    </LinearGradientBrush>
+                                                </Image.OpacityMask>
+                                            </Image>
 
-                                                    <!-- Bottom edge transparent -->
-                                                    <GradientStop Color="#00FFFFFF"
-                                                                  Offset="1.0" />
-                                                </LinearGradientBrush>
-                                            </Image.OpacityMask>
-                                        </Image>
+                                            <TextBlock Grid.Row="2"
+                                                       Grid.Column="0"
+                                                       Text="Price change:"
+                                                       Foreground="#C5C4C4"
+                                                       FontSize="9"
+                                                       Margin="10,0,0,0"
+                                                       HorizontalAlignment="Left"
+                                                       FontFamily="{StaticResource InterBlack}" />
 
-                                        <TextBlock Grid.Row="2"
-                                                   Grid.Column="0"
-                                                   Text="Price change:"
-                                                   Foreground="#C5C4C4"
-                                                   FontSize="9"
-                                                   Margin="10,0,0,0"
-                                                   HorizontalAlignment="Left"
-                                                   FontFamily="{StaticResource InterBlack}" />
+                                            <TextBlock Grid.Row="3"
+                                                       Grid.Column="0"
+                                                       Text="{Binding PriceChange, StringFormat={}{0:+0.0;-0.0}%}"
+                                                       Foreground="{Binding PriceChange, Converter={StaticResource PriceChangeColorConverter}}"
+                                                       HorizontalAlignment="Left"
+                                                       Margin="10,0,0,0" />
 
-                                        <TextBlock Grid.Row="3"
-                                                   Grid.Column="0"
-                                                   Text="{Binding PriceChange, StringFormat={}{0:+0.0;-0.0}%}"
-                                                   Foreground="{Binding PriceChange, Converter={StaticResource PriceChangeColorConverter}}"
-                                                   HorizontalAlignment="Left"
-                                                   Margin="10,0,0,0"
-                                                   FontFamily="{StaticResource InterBlack}" />
+                                            <TextBlock Grid.Row="4"
+                                                       Grid.Column="1"
+                                                       Text="{Binding Price}"
+                                                       Foreground="#FAFAFA"
+                                                       FontSize="12"
+                                                       HorizontalAlignment="Right"
+                                                       Margin="0,5,10,0" />
 
-                                        <TextBlock Grid.Row="4"
-                                                   Grid.Column="1"
-                                                   Text="{Binding Price}"
-                                                   Foreground="#FAFAFA"
-                                                   FontSize="12"
-                                                   HorizontalAlignment="Right"
-                                                   Margin="0,5,10,0"
-                                                   FontFamily="{StaticResource InterBlack}" />
-
-                                        <ToggleButton Grid.Row="4"
-                                                      Grid.Column="0"
-                                                      Style="{StaticResource StarToggleButtonStyle}"
-                                                      IsChecked="{Binding IsStarred}"
-                                                      HorizontalAlignment="Left"
-                                                      Margin="10,5,10,0" />
-                                    </Grid>
-                                </Border>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
+                                            <ToggleButton Grid.Row="4"
+                                                          Grid.Column="0"
+                                                          Style="{StaticResource StarToggleButtonStyle}"
+                                                          IsChecked="{Binding IsStarred}"
+                                                          HorizontalAlignment="Left"
+                                                          Margin="10,5,10,0" />
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                        <Button x:Name="LoadMoreButton"
+                                Content="Load More"
+                                Visibility="Visible"
+                                Style="{StaticResource LoadMoreButtonStyle}"
+                                HorizontalAlignment="Center"
+                                Click="LoadMoreButton_Click" />
+                        
+                        <!-- Padding -->
+                        <Rectangle Height="40"
+                                   Fill="Transparent" />
+                    </StackPanel>
                 </ScrollViewer>
             </StackPanel>
+        </Grid>
+
+        <!-- Footer -->
+        <Grid Grid.Row="2"
+              Background="#FF141414"
+              Height="20"
+              VerticalAlignment="Bottom">
+            <TextBlock Text="{Binding FooterViewModel.UsernameDisplay}"
+                       FontSize="10"
+                       Foreground="#FF999A9B"
+                       HorizontalAlignment="Left"
+                       VerticalAlignment="Center"
+                       Margin="10,0,0,0" />
+            <TextBlock Text="{Binding FooterViewModel.BalanceDisplay}"
+                       FontSize="15"
+                       Foreground="#FF999A9B"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"
+                       Margin="0,0,10,0" />
         </Grid>
     </Grid>
 </Window>
