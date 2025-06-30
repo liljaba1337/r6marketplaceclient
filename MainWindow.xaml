@@ -489,6 +489,20 @@
                                 </ItemsPanelTemplate>
                             </ItemsControl.ItemsPanel>
 
+                            <ItemsControl.ItemContainerStyle>
+                                <Style TargetType="ContentPresenter">
+                                    <Setter Property="Panel.ZIndex"
+                                            Value="0" />
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver"
+                                                 Value="True">
+                                            <Setter Property="Panel.ZIndex"
+                                                    Value="10" />
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </ItemsControl.ItemContainerStyle>
+
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate DataType="{x:Type vm:PurchasableItemViewModel}">
                                     <Border Width="150"
@@ -498,7 +512,13 @@
                                             CornerRadius="4"
                                             Cursor="Hand"
                                             ClipToBounds="False"
-                                            MouseLeftButtonDown="ItemCard_MouseLeftButtonDown">
+                                            MouseLeftButtonDown="ItemCard_MouseLeftButtonDown"
+                                            RenderTransformOrigin="0.5,0.5">
+                                        <Border.RenderTransform>
+                                            <ScaleTransform x:Name="scaleTransform"
+                                                            ScaleX="1"
+                                                            ScaleY="1" />
+                                        </Border.RenderTransform>
                                         <Border.Effect>
                                             <DropShadowEffect x:Name="shadowEffect"
                                                               Color="{Binding ShadowColor}"
@@ -508,29 +528,45 @@
                                         </Border.Effect>
 
                                         <Border.Triggers>
-                                            <!-- MouseEnter Animation -->
+                                            <!-- MouseEnter -->
                                             <EventTrigger RoutedEvent="MouseEnter">
                                                 <BeginStoryboard>
                                                     <Storyboard>
+                                                        <!-- Shadow effect -->
                                                         <DoubleAnimation Storyboard.TargetProperty="Effect.BlurRadius"
                                                                          To="40"
                                                                          Duration="0:0:0.2" />
                                                         <DoubleAnimation Storyboard.TargetProperty="Effect.Opacity"
                                                                          To="1"
                                                                          Duration="0:0:0.2" />
+                                                        <!-- Scale up -->
+                                                        <DoubleAnimation Storyboard.TargetProperty="RenderTransform.(ScaleTransform.ScaleX)"
+                                                                         To="1.05"
+                                                                         Duration="0:0:0.2" />
+                                                        <DoubleAnimation Storyboard.TargetProperty="RenderTransform.(ScaleTransform.ScaleY)"
+                                                                         To="1.05"
+                                                                         Duration="0:0:0.2" />
                                                     </Storyboard>
                                                 </BeginStoryboard>
                                             </EventTrigger>
 
-                                            <!-- MouseLeave Animation -->
+                                            <!-- MouseLeave -->
                                             <EventTrigger RoutedEvent="MouseLeave">
                                                 <BeginStoryboard>
                                                     <Storyboard>
+                                                        <!-- Shadow effect -->
                                                         <DoubleAnimation Storyboard.TargetProperty="Effect.BlurRadius"
                                                                          To="10"
                                                                          Duration="0:0:0.2" />
                                                         <DoubleAnimation Storyboard.TargetProperty="Effect.Opacity"
                                                                          To="0.5"
+                                                                         Duration="0:0:0.2" />
+                                                        <!-- Scale back to normal -->
+                                                        <DoubleAnimation Storyboard.TargetProperty="RenderTransform.(ScaleTransform.ScaleX)"
+                                                                         To="1"
+                                                                         Duration="0:0:0.2" />
+                                                        <DoubleAnimation Storyboard.TargetProperty="RenderTransform.(ScaleTransform.ScaleY)"
+                                                                         To="1"
                                                                          Duration="0:0:0.2" />
                                                     </Storyboard>
                                                 </BeginStoryboard>
