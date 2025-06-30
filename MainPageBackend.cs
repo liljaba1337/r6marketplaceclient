@@ -14,14 +14,22 @@ namespace r6marketplaceclient
 {
     internal class MainPageBackend
     {
-        private readonly HashSet<string> visibleCards = new HashSet<string>();
+        private readonly HashSet<EnhancedItemCard> visibleCards = new HashSet<EnhancedItemCard>();
         internal void ShowEnhancedItemCard(PurchasableItemViewModel item)
         {
-            if (visibleCards.Contains(item._item.ID)) return;
-            visibleCards.Add(item._item.ID);
+            if (visibleCards.Any(x => x.ItemId == item._item.ID)) return;
             var window = new EnhancedItemCard(item);
+            visibleCards.Add(window);
             window.Show();
-            window.Closed += (s, e) => visibleCards.Remove(item._item.ID);
+            window.Activate();
+            window.Closed += (s, e) => visibleCards.Remove(window);
+        }
+        internal void CloseAllWindows()
+        {
+            foreach (var window in visibleCards)
+            {
+                window.Close();
+            }
         }
         internal async Task<bool> PerformSearch(List<string> tags, string type, int minPrice, int maxPrice, string text, bool onlyStars, int count, int offset, bool clearItems)
         {
@@ -40,11 +48,11 @@ namespace r6marketplaceclient
                 count,
                 offset
             );
-            if (clearItems) MainWindow.Items.Clear();
+            if (clearItems) UserControls.SearchUserControl.Items.Clear();
             if (_items.Count == 0) return false;
             foreach (var item in _items)
             {
-                MainWindow.Items.Add(new PurchasableItemViewModel(item));
+                UserControls.SearchUserControl.Items.Add(new PurchasableItemViewModel(item));
             }
             return true;
         }

@@ -23,6 +23,7 @@ namespace r6marketplaceclient.Windows
     {
         private ExtendedPurchasableItemViewModel? Eitem;
         private readonly PurchasableItemViewModel item;
+        internal string ItemId => item._item.ID;
         public EnhancedItemCard(PurchasableItemViewModel item)
         {
             InitializeComponent();

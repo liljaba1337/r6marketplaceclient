@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Effects;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using r6marketplaceclient.UserControls;
 
 namespace r6marketplaceclient.Windows
 {
@@ -21,8 +22,10 @@ namespace r6marketplaceclient.Windows
     public partial class Login : Window
     {
         private readonly MainWindow _mainWindow;
-        public Login(MainWindow window)
+        private readonly SearchUserControl _searchUserControl;
+        public Login(MainWindow window, SearchUserControl searchUserControl)
         {
+            _searchUserControl = searchUserControl;
             _mainWindow = window;
             InitializeComponent();
             loginButton.IsEnabled = false;
@@ -69,7 +72,7 @@ namespace r6marketplaceclient.Windows
             {
                 _mainWindow.Show();
                 Close();
-                await _mainWindow.PrepareAndPerformSearch();
+                await _searchUserControl.PrepareAndPerformSearch();
             }
             else
             {
