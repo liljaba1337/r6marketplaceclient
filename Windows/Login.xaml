@@ -271,6 +271,7 @@
         <!-- Why Button -->
         <Button x:Name="whyButton"
                 Content="I don't want to give my credentials"
+                Height="25"
                 Grid.Row="4"
                 Style="{StaticResource WhyButtonStyle}"
                 Click="whyButton_Click"

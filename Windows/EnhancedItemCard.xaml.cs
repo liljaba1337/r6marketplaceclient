@@ -119,7 +119,7 @@ namespace r6marketplaceclient.Windows
             var mintext = PriceTrendPlot.Plot.Add.Text(
                 text: $"↓ {prices[minIndex]}",
                 x: times[minIndex],
-                y: prices[minIndex] - 1
+                y: prices[minIndex] + 1
             );
             maxtext.LabelFontColor = Color.FromHex("#0b805f");
             mintext.LabelFontColor = Color.FromHex("#99270f");

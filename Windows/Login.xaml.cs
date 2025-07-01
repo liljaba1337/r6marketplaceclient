@@ -35,7 +35,10 @@ namespace r6marketplaceclient.Windows
         {
             MessageBox.Show(
                 "All Ubisoft API methods require authentication. You don't need to have marketplace access or own the game unless you plan to use the buy/sell features. " +
-                "If you're not using those, I recommend creating an alt account to use this app instead of logging in with your main one.",
+                "If you're not using those, I recommend creating an alt account to use this app instead of logging in with your main one.\n\n" +
+                "Your credentials are stored in data/secret.dat using Windows encryption, so no one without direct access to your PC can decode them. " +
+                "Sensitive data is wiped from memory right after use. The data class implements IDisposable and clears all private fields immediately. " +
+                "You can verify this yourself in SecureStorage.cs to be 100% sure that your information stays safe and private.",
                 "Why do I need to give my credentials?",
                 MessageBoxButton.OK,
                 MessageBoxImage.Information);
