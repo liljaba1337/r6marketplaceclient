@@ -8,11 +8,13 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using r6_marketplace;
+using r6_marketplace.Classes.Item;
 
 namespace r6marketplaceclient
 {
     internal static class ApiClient
     {
+        internal static bool isAuthenticated => client.isAuthenticated;
         private static R6MarketplaceClient client;
         
         static ApiClient()
@@ -75,6 +77,25 @@ namespace r6marketplaceclient
         {
             var history = await client.ItemInfoEndpoints.GetItemPriceHistory(itemId);
             return history;
+        }
+
+        internal static async Task<Item?> GetItemById(string itemId)
+        {
+            try
+            {
+                var item = await client.ItemInfoEndpoints.GetItem(itemId);
+                return item;
+            }
+            catch (HttpRequestException ex) when (ex.StatusCode == HttpStatusCode.NotFound)
+            {
+                Debug.WriteLine($"Item with ID {itemId} not found.");
+                return null;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error fetching item by ID {itemId}: {ex.Message}");
+                return null;
+            }
         }
     }
 }

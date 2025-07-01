@@ -9,11 +9,11 @@ using r6marketplaceclient.Converters;
 
 namespace r6marketplaceclient.ViewModels
 {
-    public class PurchasableItemViewModel
+    public class ItemViewModel
     {
-        internal readonly PurchasableItem _item;
+        internal readonly Item _item;
 
-        public PurchasableItemViewModel(PurchasableItem? item = null)
+        public ItemViewModel(Item? item = null)
         {
             _item = item!;
             _item.AssetUrl.Width = 200;
@@ -45,11 +45,11 @@ namespace r6marketplaceclient.ViewModels
             get => (Price - LastSold) / LastSold * 100; set => PriceChange = value;
         }
     }
-    public class ExtendedPurchasableItemViewModel : PurchasableItemViewModel
+    public class ExtendedItemViewModel : ItemViewModel
     {
         internal readonly ItemPriceHistory _history;
         internal readonly ItemPriceHistory _history7;
-        public ExtendedPurchasableItemViewModel(PurchasableItem item, ItemPriceHistory history) : base(item)
+        public ExtendedItemViewModel(Item item, ItemPriceHistory history) : base(item)
         {
             _history = history;
             _history7 = _history.Skip(Math.Max(0, _history.Count() - 7));

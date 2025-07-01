@@ -14,7 +14,7 @@
         Background="#FF0D0D0D"
         ResizeMode="CanMinimize"
         xmlns:design="clr-namespace:r6marketplaceclient.DesignTimeData"
-        d:DataContext="{d:DesignInstance Type=design:DesignTimePurchasableItemViewModelCollection, IsDesignTimeCreatable=True}">
+        d:DataContext="{d:DesignInstance Type=design:DesignTimeItemViewModelCollection, IsDesignTimeCreatable=True}">
 
     <Window.Resources>
         <FontFamily x:Key="InterBlack">
@@ -43,41 +43,59 @@
             <StackPanel Orientation="Horizontal"
                         Grid.Column="0"
                         HorizontalAlignment="Left">
-                <Button Content="Search"
+                <Button x:Name="SearchButton"
+                        Tag="search"
+                        Content="Search"
                         Width="80"
                         Height="23"
                         Margin="5,0,0,0"
+                        Click="HeaderButton_Click"
                         BorderBrush="{DynamicResource AccentColor}"
                         IsEnabled="False" />
-                <Button Content="Bookmarks"
+                <Button x:Name="BookmarksButton"
+                        Tag="bookmarks"
+                        Content="Bookmarks"
                         Width="80"
                         Height="23"
                         Margin="5,0,0,0"
+                        Click="HeaderButton_Click"
                         BorderBrush="{DynamicResource AccentColor}" />
-                <Button Content="Inventory"
+                <Button x:Name="InventoryButton"
+                        Content="Inventory"
+                        Tag="inventory"
                         Width="80"
                         Height="23"
                         Margin="5,0,0,0"
+                        Click="HeaderButton_Click"
                         BorderBrush="{DynamicResource AccentColor}" />
-                <Button Content="Orders"
+                <Button x:Name="OrdersButton"
+                        Content="Orders"
+                        Tag="orders"
                         Width="80"
                         Height="23"
                         Margin="5,0,0,0"
+                        Click="HeaderButton_Click"
                         BorderBrush="{DynamicResource AccentColor}" />
             </StackPanel>
 
             <StackPanel Orientation="Horizontal"
                         Grid.Column="1"
                         HorizontalAlignment="Right">
-                <Button Content="Settings"
+                <Button x:Name="SettingsButton"
+                        Content="Settings"
+                        Tag="settings"
                         Width="80"
                         Height="23"
                         Margin="0,0,5,0"
+                        Click="HeaderButton_Click"
                         BorderBrush="{DynamicResource AccentColor}" />
-                <Button Content="Account"
+                <Button x:Name="AccountButton"
+                        Content="Account"
+                        Tag="account"
                         Width="80"
                         Height="23"
                         Margin="0,0,5,0"
+                        Click="HeaderButton_Click"
                         BorderBrush="{DynamicResource AccentColor}" />
             </StackPanel>
         </Grid>

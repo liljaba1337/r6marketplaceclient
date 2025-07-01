@@ -21,10 +21,10 @@ namespace r6marketplaceclient.Windows
     /// </summary>
     public partial class EnhancedItemCard : Window
     {
-        private ExtendedPurchasableItemViewModel? Eitem;
-        private readonly PurchasableItemViewModel item;
+        private ExtendedItemViewModel? Eitem;
+        private readonly ItemViewModel item;
         internal string ItemId => item._item.ID;
-        public EnhancedItemCard(PurchasableItemViewModel item)
+        public EnhancedItemCard(ItemViewModel item)
         {
             InitializeComponent();
             Title = item.Name;
@@ -54,7 +54,7 @@ namespace r6marketplaceclient.Windows
                 Close();
                 return;
             }
-            Eitem = new ExtendedPurchasableItemViewModel(item._item, history);
+            Eitem = new ExtendedItemViewModel(item._item, history);
             DataContext = Eitem;
             UpdatePriceTrendGraph();
         }

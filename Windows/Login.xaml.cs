@@ -22,8 +22,8 @@ namespace r6marketplaceclient.Windows
     public partial class Login : Window
     {
         private readonly MainWindow _mainWindow;
-        private readonly SearchUserControl _searchUserControl;
-        public Login(MainWindow window, SearchUserControl searchUserControl)
+        private readonly UserControls.MainWindowControls.SearchUserControl _searchUserControl;
+        public Login(MainWindow window, UserControls.MainWindowControls.SearchUserControl searchUserControl)
         {
             _searchUserControl = searchUserControl;
             _mainWindow = window;

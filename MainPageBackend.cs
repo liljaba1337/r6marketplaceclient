@@ -15,7 +15,7 @@ namespace r6marketplaceclient
     internal class MainPageBackend
     {
         private readonly HashSet<EnhancedItemCard> visibleCards = new HashSet<EnhancedItemCard>();
-        internal void ShowEnhancedItemCard(PurchasableItemViewModel item)
+        internal void ShowEnhancedItemCard(ItemViewModel item)
         {
             if (visibleCards.Any(x => x.ItemId == item._item.ID)) return;
             var window = new EnhancedItemCard(item);
@@ -48,11 +48,11 @@ namespace r6marketplaceclient
                 count,
                 offset
             );
-            if (clearItems) UserControls.SearchUserControl.Items.Clear();
+            if (clearItems) UserControls.MainWindowControls.SearchUserControl.Items.Clear();
             if (_items.Count == 0) return false;
             foreach (var item in _items)
             {
-                UserControls.SearchUserControl.Items.Add(new PurchasableItemViewModel(item));
+                UserControls.MainWindowControls.SearchUserControl.Items.Add(new ItemViewModel(item));
             }
             return true;
         }

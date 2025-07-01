@@ -10,7 +10,7 @@ namespace r6marketplaceclient
 {
     class ItemStarrer
     {
-        private static HashSet<string> StarredItems = new();
+        public static HashSet<string> StarredItems { get; private set; } = new();
         public static bool IsItemStarred(string itemId) => StarredItems.Contains(itemId);
         public static void LoadStarredItems()
         {

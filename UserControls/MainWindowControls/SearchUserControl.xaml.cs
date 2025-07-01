@@ -19,7 +19,7 @@ using r6_marketplace.Utils;
 using r6marketplaceclient.ViewModels;
 using r6marketplaceclient.Windows;
 
-namespace r6marketplaceclient.UserControls
+namespace r6marketplaceclient.UserControls.MainWindowControls
 {
     /// <summary>
     /// Interaction logic for SearchUserControl.xaml
@@ -27,17 +27,15 @@ namespace r6marketplaceclient.UserControls
     public partial class SearchUserControl : UserControl, INotifyPropertyChanged
     {
         private int offset = 0;
-        private readonly MainWindow mainWindow;
+        private readonly r6marketplaceclient.MainWindow mainWindow;
         private readonly List<ComboBox> comboBoxes = new List<ComboBox>();
         private readonly MainPageBackend backend = new MainPageBackend();
-
-        #region inotifyproperty stuff
-        public static ObservableCollection<PurchasableItemViewModel> Items { get; private set; } = new();
+        
+        public static ObservableCollection<ItemViewModel> Items { get; private set; } = new();
         public event PropertyChangedEventHandler? PropertyChanged;
         protected void OnPropertyChanged(string propertyName) =>
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        #endregion
-        public SearchUserControl(MainWindow window)
+        public SearchUserControl(r6marketplaceclient.MainWindow window)
         {
             InitializeComponent();
             SetupComponents();
@@ -113,12 +111,13 @@ namespace r6marketplaceclient.UserControls
         }
         private void TryAutoLogin()
         {
+            if (ApiClient.isAuthenticated) return;
             using var data = SecureStorage.Decrypt();
             if (data != null && !string.IsNullOrEmpty(data.token)) ApiClient.SetToken(data.token);
         }
         private void ItemCard_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            if (sender is Border border && border.DataContext is PurchasableItemViewModel item)
+            if (sender is Border border && border.DataContext is ItemViewModel item)
             {
                 backend.ShowEnhancedItemCard(item);
             }

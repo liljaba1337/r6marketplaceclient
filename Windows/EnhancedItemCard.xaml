@@ -12,7 +12,7 @@
         Title="EnhancedItemCard" Height="450" Width="600" ResizeMode="CanMinimize"
         Background="#FF0D0D0D" WindowStyle="None" AllowsTransparency="True" BorderBrush="Aqua" BorderThickness="1"
         xmlns:design="clr-namespace:r6marketplaceclient.DesignTimeData"
-        d:DataContext="{d:DesignInstance design:DesignTimePurchasableItemViewModel, IsDesignTimeCreatable=True}" Loaded="Window_Loaded">
+        d:DataContext="{d:DesignInstance design:DesignTimeItemViewModel, IsDesignTimeCreatable=True}" Loaded="Window_Loaded">
 
     <Window.Resources>
         <converters:PriceChangeColorConverter x:Key="PriceChangeColorConverter"/>
