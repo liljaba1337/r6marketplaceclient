@@ -1,16 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using r6_marketplace.Classes.Item;
+﻿using System.Windows;
 using r6marketplaceclient.ViewModels;
 using ScottPlot;
 
@@ -19,16 +7,16 @@ namespace r6marketplaceclient.Windows
     /// <summary>
     /// Interaction logic for EnhancedItemCard.xaml
     /// </summary>
-    public partial class EnhancedItemCard : Window
+    public partial class EnhancedItemCard
     {
-        private ExtendedItemViewModel? Eitem;
-        private readonly ItemViewModel item;
-        internal string ItemId => item._item.ID;
+        private ExtendedItemViewModel? _eitem;
+        private readonly ItemViewModel _item;
+        internal string ItemId => _item.Item.ID;
         public EnhancedItemCard(ItemViewModel item)
         {
             InitializeComponent();
             Title = item.Name;
-            this.item = item;
+            _item = item;
             InitializePriceTrendGraph();
         }
 
@@ -47,15 +35,15 @@ namespace r6marketplaceclient.Windows
 
         private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            var history = await ApiClient.GetItemPriceHistory(item._item.ID);
+            var history = await ApiClient.GetItemPriceHistory(_item.Item.ID);
             if (history == null)
             {
                 MessageBox.Show("Failed to load item price history.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 Close();
                 return;
             }
-            Eitem = new ExtendedItemViewModel(item._item, history);
-            DataContext = Eitem;
+            _eitem = new ExtendedItemViewModel(_item.Item, history);
+            DataContext = _eitem;
             UpdatePriceTrendGraph();
         }
         private void InitializePriceTrendGraph()
@@ -75,28 +63,28 @@ namespace r6marketplaceclient.Windows
         }
         private void UpdatePriceTrendGraph()
         {
-            if (Eitem?._history == null || !Eitem._history.Any()) return;
+            if (_eitem?.History == null || !_eitem.History.Any()) return;
 
-            double[] times = Eitem._history.Select(p => p.Date.ToOADate()).ToArray();
-            int[] prices = Eitem._history.Select(p => p.AveragePrice).ToArray();
-            double[] volumes = Eitem._history.Select(p => (double)p.ItemsCount).ToArray();
+            double[] times = _eitem.History.Select(p => p.Date.ToOADate()).ToArray();
+            int[] prices = _eitem.History.Select(p => p.AveragePrice).ToArray();
+            double[] volumes = _eitem.History.Select(p => (double)p.ItemsCount).ToArray();
 
-            var averageLine = PriceTrendPlot.Plot.Add.HorizontalLine(Eitem._history.Average, color: ScottPlot.Color.FromHex("#FF5733"));
-            averageLine.LabelStyle.Text = $"Avg: {Eitem.AveragePrice30}";
-            averageLine.LabelStyle.ForeColor = ScottPlot.Color.FromHex("#0c0c0d");
+            var averageLine = PriceTrendPlot.Plot.Add.HorizontalLine(_eitem.History.Average, color: Color.FromHex("#FF5733"));
+            averageLine.LabelStyle.Text = $"Avg: {_eitem.AveragePrice30}";
+            averageLine.LabelStyle.ForeColor = Color.FromHex("#0c0c0d");
             averageLine.LabelStyle.FontSize = 10;
             averageLine.LabelStyle.Rotation = 0;
             averageLine.LabelStyle.Padding = 2;
 
-            var currentLine = PriceTrendPlot.Plot.Add.HorizontalLine(item.Price, color: ScottPlot.Color.FromHex("#00FFB7"));
-            currentLine.LabelStyle.Text = $"Now: {item.Price}";
-            currentLine.LabelStyle.ForeColor = ScottPlot.Color.FromHex("#0c0c0d");
+            var currentLine = PriceTrendPlot.Plot.Add.HorizontalLine(_item.Price, color: Color.FromHex("#00FFB7"));
+            currentLine.LabelStyle.Text = $"Now: {_item.Price}";
+            currentLine.LabelStyle.ForeColor = Color.FromHex("#0c0c0d");
             currentLine.LabelStyle.FontSize = 10;
             currentLine.LabelStyle.Rotation = 0;
             currentLine.LabelStyle.Padding = 2;
 
             var scatter = PriceTrendPlot.Plot.Add.Scatter(times, prices);
-            scatter.Color = ScottPlot.Color.FromHex("#00FFB7");
+            scatter.Color = Color.FromHex("#00FFB7");
             scatter.LineWidth = 2;
             scatter.MarkerSize = 4;
 

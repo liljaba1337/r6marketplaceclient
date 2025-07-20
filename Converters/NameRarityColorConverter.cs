@@ -13,42 +13,33 @@ namespace r6marketplaceclient.Converters
     {
         public static Color Convert(string rarity)
         {
-            switch (rarity)
+            return rarity switch
             {
-                case "rarity_uncommon":
-                    return Color.FromRgb(0, 153, 0);
-                case "rarity_rare":
-                    return Color.FromRgb(0, 102, 204);
-                case "rarity_superrare":
-                    return Color.FromRgb(153, 0, 153);
-                case "rarity_legendary":
-                    return Color.FromRgb(255, 153, 0);
-                default:
-                    return Colors.White;
-            }
+                "rarity_uncommon" => Color.FromRgb(0, 153, 0),
+                "rarity_rare" => Color.FromRgb(0, 102, 204),
+                "rarity_superrare" => Color.FromRgb(153, 0, 153),
+                "rarity_legendary" => Color.FromRgb(255, 153, 0),
+                _ => Colors.White
+            };
         }
     }
     class NameRarityColorConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is string Rarity)
+            if (value is not string rarity) return new SolidColorBrush(Colors.White);
+            return rarity switch
             {
-                switch (Rarity)
-                {
-                    case "rarity_uncommon":
-                        return new SolidColorBrush(Color.FromRgb(0, 153, 0)); // Green
-                    case "rarity_rare":
-                        return new SolidColorBrush(Color.FromRgb(0, 102, 204)); // Blue
-                    case "rarity_superrare":
-                        return new SolidColorBrush(Color.FromRgb(153, 0, 153)); // Purple
-                    case "rarity_legendary":
-                        return new SolidColorBrush(Color.FromRgb(255, 153, 0)); // Orange
-                    default:
-                        return new SolidColorBrush(Colors.White);
-                }
-            }
-            return new SolidColorBrush(Colors.White);
+                "rarity_uncommon" => new SolidColorBrush(Color.FromRgb(0, 153, 0)) // Green
+                ,
+                "rarity_rare" => new SolidColorBrush(Color.FromRgb(0, 102, 204)) // Blue
+                ,
+                "rarity_superrare" => new SolidColorBrush(Color.FromRgb(153, 0, 153)) // Purple
+                ,
+                "rarity_legendary" => new SolidColorBrush(Color.FromRgb(255, 153, 0)) // Orange
+                ,
+                _ => new SolidColorBrush(Colors.White)
+            };
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

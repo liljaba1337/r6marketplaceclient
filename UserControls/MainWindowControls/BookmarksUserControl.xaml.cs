@@ -1,23 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using r6_marketplace.Classes.Item;
-using r6marketplaceclient.UserControls.Common;
 using r6marketplaceclient.ViewModels;
-using SkiaSharp;
 
 namespace r6marketplaceclient.UserControls.MainWindowControls
 {
@@ -41,7 +28,7 @@ namespace r6marketplaceclient.UserControls.MainWindowControls
 
         private async Task LoadStarredItems()
         {
-            IEnumerable<string> itemsToLoad = ItemStarrer.StarredItems.Except(Items.Select(i => i._item.ID));
+            IEnumerable<string> itemsToLoad = ItemStarrer.StarredItems.Except(Items.Select(i => i.Item.ID));
             Debug.WriteLine($"Loading {itemsToLoad.Count()} items");
             foreach (var item in itemsToLoad)
             {

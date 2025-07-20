@@ -1,20 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using r6_marketplace.Utils;
 using r6marketplaceclient.ViewModels;
 using r6marketplaceclient.Windows;
@@ -24,23 +13,21 @@ namespace r6marketplaceclient.UserControls.MainWindowControls
     /// <summary>
     /// Interaction logic for SearchUserControl.xaml
     /// </summary>
-    public partial class SearchUserControl : UserControl, INotifyPropertyChanged
+    public partial class SearchUserControl : INotifyPropertyChanged
     {
-        private int offset = 0;
-        private readonly r6marketplaceclient.MainWindow mainWindow;
-        private readonly List<ComboBox> comboBoxes = new List<ComboBox>();
-        private readonly MainPageBackend backend = new MainPageBackend();
-        
-        public static ObservableCollection<ItemViewModel> Items { get; private set; } = new();
+        private int _offset;
+        private readonly MainWindow _mainWindow;
+        private readonly List<ComboBox> _comboBoxes = new();
+        private readonly MainPageBackend _backend = new();
+
+        public static ObservableCollection<ItemViewModel> Items { get; } = new();
         public event PropertyChangedEventHandler? PropertyChanged;
-        protected void OnPropertyChanged(string propertyName) =>
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        public SearchUserControl(r6marketplaceclient.MainWindow window)
+        public SearchUserControl(MainWindow window)
         {
             InitializeComponent();
             SetupComponents();
             DataContext = this;
-            mainWindow = window;
+            _mainWindow = window;
         }
         private async void SearchBox_KeyDown(object sender, KeyEventArgs e)
         {
@@ -52,14 +39,14 @@ namespace r6marketplaceclient.UserControls.MainWindowControls
         private void InitComboBox<TEnum>(ComboBox comboBox) where TEnum : Enum
         {
             var items = Enum.GetNames(typeof(TEnum))
-                .Select(r6_marketplace.Utils.SearchTags.GetOriginalName)
+                .Select(SearchTags.GetOriginalName)
                 .Order()
                 .ToList();
 
             items.Insert(0, "All");
             comboBox.ItemsSource = items;
             comboBox.SelectedIndex = 0;
-            comboBoxes.Add(comboBox);
+            _comboBoxes.Add(comboBox);
 
             comboBox.SelectionChanged += filterComboBox_SelectionChanged;
         }
@@ -75,7 +62,7 @@ namespace r6marketplaceclient.UserControls.MainWindowControls
         {
             List<string> tags = new List<string>();
 
-            foreach (var comboBox in comboBoxes)
+            foreach (var comboBox in _comboBoxes)
             {
                 if (comboBox.SelectedItem != null && comboBox.SelectedItem.ToString() != "All"
                     && comboBox.Name != "typeFilterComboBox")
@@ -84,60 +71,58 @@ namespace r6marketplaceclient.UserControls.MainWindowControls
                 }
             }
 
-            bool found = await backend.PerformSearch(
+            var items = await _backend.PerformSearch(
                 tags,
-                typeFilterComboBox.SelectedItem?.ToString() ?? "All",
-                int.TryParse(minPriceTextBox.Text, out int res) ? res : 10,
-                int.TryParse(maxPriceTextBox.Text, out int res1) ? res1 : 1000000,
+                TypeFilterComboBox.SelectedItem?.ToString() ?? "All",
+                int.TryParse(MinPriceTextBox.Text, out int res) ? res : 10,
+                int.TryParse(MaxPriceTextBox.Text, out int res1) ? res1 : 1000000,
                 SearchBox.Text,
                 OnlyStarsCheck.IsChecked ?? false,
                 count,
-                offset,
-                clearItems
+                offset
             );
+            bool found = items.Count > 0;
+            if (clearItems) Items.Clear();
+            foreach (var item in items) Items.Add(item);
             NoItemsPlaceholder.Visibility = !found && clearItems ? Visibility.Visible : Visibility.Collapsed;
             LoadMoreButton.Visibility = count == 500 || (found && Items.Count > 0) ? Visibility.Visible : Visibility.Collapsed;
         }
         private void SetupComponents()
         {
-            InitComboBox<r6_marketplace.Utils.SearchTags.Weapon>(weaponFilterComboBox);
-            InitComboBox<r6_marketplace.Utils.SearchTags.Operator>(operatorFilterComboBox);
-            InitComboBox<r6_marketplace.Utils.SearchTags.EsportsTeam>(teamFilterComboBox);
-            InitComboBox<r6_marketplace.Utils.SearchTags.Event>(eventFilterComboBox);
-            InitComboBox<r6_marketplace.Utils.SearchTags.Rarity>(rarityFilterComboBox);
-            InitComboBox<r6_marketplace.Utils.SearchTags.Season>(seasonFilterComboBox);
-            InitComboBox<r6_marketplace.Utils.SearchTags.Type>(typeFilterComboBox);
+            InitComboBox<SearchTags.Weapon>(WeaponFilterComboBox);
+            InitComboBox<SearchTags.Operator>(OperatorFilterComboBox);
+            InitComboBox<SearchTags.EsportsTeam>(TeamFilterComboBox);
+            InitComboBox<SearchTags.Event>(EventFilterComboBox);
+            InitComboBox<SearchTags.Rarity>(RarityFilterComboBox);
+            InitComboBox<SearchTags.Season>(SeasonFilterComboBox);
+            InitComboBox<SearchTags.Type>(TypeFilterComboBox);
             LoadMoreButton.Visibility = Visibility.Collapsed;
         }
         private void TryAutoLogin()
         {
-            if (ApiClient.isAuthenticated) return;
+            if (ApiClient.IsAuthenticated) return;
             using var data = SecureStorage.Decrypt();
-            if (data != null && !string.IsNullOrEmpty(data.token)) ApiClient.SetToken(data.token);
+            if (data != null && !string.IsNullOrEmpty(data.Token)) ApiClient.SetToken(data.Token);
         }
         private void ItemCard_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            if (sender is Border border && border.DataContext is ItemViewModel item)
+            if (sender is Border { DataContext: ItemViewModel item })
             {
-                backend.ShowEnhancedItemCard(item);
+                _backend.ShowEnhancedItemCard(item);
             }
         }
         private async void OnlyStarsCheck_Click(object sender, RoutedEventArgs e)
         {
-            offset = 0;
+            _offset = 0;
             await PrepareAndPerformSearch(count: OnlyStarsCheck.IsChecked == true ? 500 : 40);
         }
 
         private async void LoadMoreButton_Click(object sender, RoutedEventArgs e)
         {
-            offset += OnlyStarsCheck.IsChecked == true ? 500 : 40;
-            await PrepareAndPerformSearch(offset, false, OnlyStarsCheck.IsChecked == true ? 500 : 40);
+            _offset += OnlyStarsCheck.IsChecked == true ? 500 : 40;
+            await PrepareAndPerformSearch(_offset, false, OnlyStarsCheck.IsChecked == true ? 500 : 40);
         }
 
-        private void Window_Closed(object sender, EventArgs e)
-        {
-            backend.CloseAllWindows();
-        }
         private async void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
             Debug.WriteLine("Control loaded, trying auto-login...");
@@ -152,13 +137,13 @@ namespace r6marketplaceclient.UserControls.MainWindowControls
                 Debug.WriteLine($"Error during search: {ex.Message}");
 
                 using SecureStorageFormat? data = SecureStorage.Decrypt();
-                if (data != null && !string.IsNullOrEmpty(data.email) && !string.IsNullOrEmpty(data.password))
+                if (data != null && !string.IsNullOrEmpty(data.Email) && !string.IsNullOrEmpty(data.Password))
                 {
                     Debug.WriteLine("Attempting to reauthenticate with stored credentials");
-                    bool success = await ApiClient.Authenticate(data.email, data.password);
+                    bool success = await ApiClient.Authenticate(data.Email, data.Password);
                     if (!success)
                     {
-                        Login loginWindow = new Login(mainWindow, this);
+                        Login loginWindow = new Login(_mainWindow, this);
                         loginWindow.ShowDialog();
                         loginWindow.Activate();
                     }
@@ -170,7 +155,7 @@ namespace r6marketplaceclient.UserControls.MainWindowControls
                 else
                 {
                     Debug.WriteLine("Showing login window.");
-                    Login loginWindow = new Login(mainWindow, this);
+                    Login loginWindow = new Login(_mainWindow, this);
                     loginWindow.ShowDialog();
                     loginWindow.Activate();
                 }

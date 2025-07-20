@@ -1,18 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using r6_marketplace.Utils;
 using r6marketplaceclient.ViewModels;
 
 namespace r6marketplaceclient.UserControls.Common
@@ -20,71 +11,122 @@ namespace r6marketplaceclient.UserControls.Common
     /// <summary>
     /// Interaction logic for ItemGridView.xaml
     /// </summary>
-    public partial class ItemGridView : UserControl
+    public partial class ItemGridView
     {
-        public static readonly RoutedEvent OnClickEvent = EventManager.RegisterRoutedEvent(
-            "OnClick", RoutingStrategy.Bubble, typeof(EventHandler<ItemClickEventArgs>), typeof(ItemGridView));
-        public static readonly RoutedEvent OnLoadMoreClickEvent = EventManager.RegisterRoutedEvent(
-            "OnLoadMoreClick", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(ItemGridView));
-        public ItemGridView()
-        {
-            InitializeComponent();
-            DataContext = this;
-        }
-        public static readonly DependencyProperty ItemsProperty =
-            DependencyProperty.Register("Items", typeof(ObservableCollection<ItemViewModel>), typeof(ItemGridView), new PropertyMetadata(null));
+        private readonly List<ComboBox> _comboBoxes = new();
+        internal event EventHandler<ComboBoxSelectionChangedEventArgs>? ComboBoxSelectionChanged;
+        internal event EventHandler<ItemCardMouseEventArgs>? ItemCardMouseClick;
+        internal event EventHandler? LoadMoreButtonClick;
+        internal event EventHandler<OnlyStarsCheckChangedEventArgs>? OnlyStarsClick;
+        internal event EventHandler<SearchBoxKeyDownEventArgs>? SearchBoxKeyDown;
+
+        public static readonly DependencyProperty ItemsProperty = DependencyProperty.Register(
+            nameof(Items),
+            typeof(ObservableCollection<ItemViewModel>),
+            typeof(ItemGridView),
+            new PropertyMetadata(new ObservableCollection<ItemViewModel>()));
+
         public ObservableCollection<ItemViewModel> Items
         {
             get => (ObservableCollection<ItemViewModel>)GetValue(ItemsProperty);
             set => SetValue(ItemsProperty, value);
         }
-        public event EventHandler<ItemClickEventArgs> ItemClick
+        public ItemGridView()
         {
-            add { AddHandler(OnClickEvent, value); }
-            remove { RemoveHandler(OnClickEvent, value); }
+            InitializeComponent();
+            SetupComponents();
+            DataContext = this;
         }
-        public event RoutedEventHandler LoadMoreClick
+        private void InitComboBox<TEnum>(ComboBox comboBox) where TEnum : Enum
         {
-            add { AddHandler(OnLoadMoreClickEvent, value); }
-            remove { RemoveHandler(OnLoadMoreClickEvent, value); }
-        }
+            var items = Enum.GetNames(typeof(TEnum))
+                .Select(SearchTags.GetOriginalName)
+                .Order()
+                .ToList();
 
-        public static readonly DependencyProperty IsEmptyProperty =
-            DependencyProperty.Register("IsEmpty", typeof(Visibility), typeof(ItemGridView), new PropertyMetadata(Visibility.Collapsed));
+            items.Insert(0, "All");
+            comboBox.ItemsSource = items;
+            comboBox.SelectedIndex = 0;
+            _comboBoxes.Add(comboBox);
 
-        public static readonly DependencyProperty IsLoadMoreVisibleProperty =
-            DependencyProperty.Register("IsLoadMoreVisible", typeof(Visibility), typeof(ItemGridView), new PropertyMetadata(Visibility.Collapsed));
-
-        public Visibility IsEmpty
-        {
-            get => (Visibility)GetValue(IsEmptyProperty);
-            set => SetValue(IsEmptyProperty, value);
+            comboBox.SelectionChanged += filterComboBox_SelectionChanged;
         }
-        public Visibility IsLoadMoreVisible
+        private void filterComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            get => (Visibility)GetValue(IsLoadMoreVisibleProperty);
-            set => SetValue(IsLoadMoreVisibleProperty, value);
-        }
-        private void ItemCard_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            if (sender is FrameworkElement element && element.DataContext is ItemViewModel item)
+            if (sender is ComboBox comboBox && comboBox.SelectedItem != null)
             {
-                RaiseEvent(new ItemClickEventArgs(OnClickEvent, item));
+                Debug.WriteLine($"ComboBox {comboBox.Name} changed to {comboBox.SelectedItem}");
+
+                ComboBoxSelectionChanged?.Invoke(this, new ComboBoxSelectionChangedEventArgs(comboBox, comboBox.SelectedItem));
             }
         }
+        private void SetupComponents()
+        {
+            InitComboBox<SearchTags.Weapon>(WeaponFilterComboBox);
+            InitComboBox<SearchTags.Operator>(OperatorFilterComboBox);
+            InitComboBox<SearchTags.EsportsTeam>(TeamFilterComboBox);
+            InitComboBox<SearchTags.Event>(EventFilterComboBox);
+            InitComboBox<SearchTags.Rarity>(RarityFilterComboBox);
+            InitComboBox<SearchTags.Season>(SeasonFilterComboBox);
+            InitComboBox<SearchTags.Type>(TypeFilterComboBox);
+            LoadMoreButton.Visibility = Visibility.Collapsed;
+        }
+
+        // item card lmb click handler
+        private void Border_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if(sender is not Border { DataContext: ItemViewModel item }) return;
+            ItemCardMouseClick?.Invoke(this, new ItemCardMouseEventArgs(item));
+        }
+
         private void LoadMoreButton_Click(object sender, RoutedEventArgs e)
         {
-            RaiseEvent(new RoutedEventArgs(OnLoadMoreClickEvent));
+            LoadMoreButtonClick?.Invoke(this, EventArgs.Empty);
+        }
+
+        private void OnlyStarsCheck_Click(object sender, RoutedEventArgs e)
+        {
+            OnlyStarsClick?.Invoke(this, new OnlyStarsCheckChangedEventArgs(OnlyStarsCheck.IsChecked ?? false));
+        }
+
+        private void SearchBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            SearchBoxKeyDown?.Invoke(this, new SearchBoxKeyDownEventArgs(SearchBox.Text));
         }
     }
-    public class ItemClickEventArgs : RoutedEventArgs
+    public class ComboBoxSelectionChangedEventArgs : EventArgs
     {
-        public ItemViewModel ClickedItem { get; }
+        public ComboBox ComboBox { get; }
+        public object SelectedItem { get; }
 
-        public ItemClickEventArgs(RoutedEvent routedEvent, ItemViewModel clickedItem)
-            : base(routedEvent)
+        public ComboBoxSelectionChangedEventArgs(ComboBox comboBox, object selectedItem)
         {
-            ClickedItem = clickedItem;
+            ComboBox = comboBox;
+            SelectedItem = selectedItem;
+        }
+    }
+    public class ItemCardMouseEventArgs : EventArgs
+    {
+        public ItemViewModel Item { get; }
+        public ItemCardMouseEventArgs(ItemViewModel item)
+        {
+            Item = item;
+        }
+    }
+    public class OnlyStarsCheckChangedEventArgs : EventArgs
+    {
+        public bool IsChecked { get; }
+        public OnlyStarsCheckChangedEventArgs(bool isChecked)
+        {
+            IsChecked = isChecked;
+        }
+    }
+    public class SearchBoxKeyDownEventArgs : EventArgs
+    {
+        public string Text { get; }
+        public SearchBoxKeyDownEventArgs(string text)
+        {
+            Text = text;
         }
     }
 }

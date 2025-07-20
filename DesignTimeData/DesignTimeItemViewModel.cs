@@ -40,7 +40,7 @@ namespace r6marketplaceclient.DesignTimeData
         {
         }
         public string Name { get; } = "DESIGN TIME ITEM";
-        public Uri ImageUri { get; set; } = new Uri("https://cdn.sendmeyourfeet.pics/uploads/4a46zq84a6rcl38jjqlz.jpg");
+        public Uri ImageUri { get; init; } = new Uri("https://cdn.sendmeyourfeet.pics/uploads/4a46zq84a6rcl38jjqlz.jpg");
         public bool IsStarred { get; set; } = false;
         public double Price { get; set; } = 19.99;
         public double AveragePrice7 { get; } = 19.99;

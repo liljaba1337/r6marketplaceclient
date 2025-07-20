@@ -1,0 +1,24 @@
+﻿<UserControl x:Class="r6marketplaceclient.UserControls.MainWindowControls.InventoryUserControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:r6marketplaceclient.UserControls.MainWindowControls"
+             xmlns:converters="clr-namespace:r6marketplaceclient.Converters"
+             xmlns:vm="clr-namespace:r6marketplaceclient.ViewModels"
+             mc:Ignorable="d"
+             xmlns:common="clr-namespace:r6marketplaceclient.UserControls.Common"
+             xmlns:design="clr-namespace:r6marketplaceclient.DesignTimeData"
+             d:DataContext="{d:DesignInstance Type=design:DesignTimeItemViewModelCollection, IsDesignTimeCreatable=True}"
+             d:DesignHeight="665"
+             d:DesignWidth="900"
+             Loaded="UserControl_Loaded">
+    <Grid>
+        <common:ItemGridView x:Name="ItemGrid"
+                             Items="{Binding Items}"
+                             ComboBoxSelectionChanged="ItemGrid_ComboBoxSelectionChanged"
+                             SearchBoxKeyDown="ItemGrid_SearchBoxKeyDown"
+                             OnlyStarsClick="ItemGrid_OnlyStarsClick"
+                             ItemCardMouseClick="ItemGrid_ItemCardMouseClick"/>
+    </Grid>
+</UserControl>

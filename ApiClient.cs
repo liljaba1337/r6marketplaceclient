@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
+﻿using System.Diagnostics;
 using System.Net;
 using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
 using r6_marketplace;
 using r6_marketplace.Classes.Item;
 
@@ -14,9 +8,9 @@ namespace r6marketplaceclient
 {
     internal static class ApiClient
     {
-        internal static bool isAuthenticated => client.isAuthenticated;
-        private static R6MarketplaceClient client;
-        
+        internal static bool IsAuthenticated => _client.isAuthenticated;
+        private static R6MarketplaceClient _client = new R6MarketplaceClient();
+
         static ApiClient()
         {
             InitializeClient();
@@ -24,8 +18,8 @@ namespace r6marketplaceclient
 
         private static void InitializeClient(string? token = null)
         {
-            client = new R6MarketplaceClient(token: token);
-            client.OnTokenRefreshed += (string oldToken, string newToken, DateTime expirationDate) =>
+            _client = new R6MarketplaceClient(token: token);
+            _client.OnTokenRefreshed += (oldToken, newToken, expirationDate) =>
             {
                 Debug.WriteLine($"Token refreshed: {oldToken} -> {newToken}, expires at {expirationDate}");
                 SecureStorage.Encrypt("token", newToken);
@@ -38,7 +32,7 @@ namespace r6marketplaceclient
         {
             try
             {
-                string token = await client.Authenticate(email, password);
+                string token = await _client.Authenticate(email, password);
                 SecureStorage.Encrypt(email, password, token);
             }
             catch (Exception ex)
@@ -49,9 +43,9 @@ namespace r6marketplaceclient
             return true;
         }
 
-        internal static async Task<int> GetBalance() => await client.AccountEndpoints.GetBalance();
+        internal static async Task<int> GetBalance() => await _client.AccountEndpoints.GetBalance();
 
-        internal static async Task<List<r6_marketplace.Classes.Item.PurchasableItem>> Search(
+        internal static async Task<List<PurchasableItem>> Search(
             string name,
             List<string> tags,
             List<string> types,
@@ -61,21 +55,21 @@ namespace r6marketplaceclient
             int limit = 400,
             int offset = 0)
         {
-            var items = await client.SearchEndpoints.SearchItemUnrestricted(name, types, tags,
+            var items = await _client.SearchEndpoints.SearchItemUnrestricted(name, types, tags,
                 r6_marketplace.Endpoints.SearchEndpoints.SortBy.PurchaseAvailaible,
-                r6_marketplace.Endpoints.SearchEndpoints.SortDirection.DESC, limit, offset, r6_marketplace.Utils.Data.Local.en);
+                r6_marketplace.Endpoints.SearchEndpoints.SortDirection.DESC, limit, offset);
             Debug.WriteLine($"Found {items.Count} items matching the search criteria.");
-            var filtereditems = items.Where(item => item.LastSoldAtPrice >= minPrice && item.LastSoldAtPrice <= maxPrice).ToList();
-            if (onlyStars)
-            {
-                filtereditems = filtereditems.Where(item => ItemStarrer.IsItemStarred(item.ID)).ToList();
-                Debug.WriteLine($"Filtered to {filtereditems.Count} starred items.");
-            }
+            List<PurchasableItem> filtereditems = items.Where(item => item.LastSoldAtPrice >= minPrice && item.LastSoldAtPrice <= maxPrice).ToList();
+            
+            if (!onlyStars) return filtereditems;
+            
+            filtereditems = filtereditems.Where(item => ItemStarrer.IsItemStarred(item.ID)).ToList();
+            Debug.WriteLine($"Filtered to {filtereditems.Count} starred items.");
             return filtereditems;
         }
-        internal static async Task<r6_marketplace.Classes.Item.ItemPriceHistory?> GetItemPriceHistory(string itemId)
+        internal static async Task<ItemPriceHistory?> GetItemPriceHistory(string itemId)
         {
-            var history = await client.ItemInfoEndpoints.GetItemPriceHistory(itemId);
+            var history = await _client.ItemInfoEndpoints.GetItemPriceHistory(itemId);
             return history;
         }
 
@@ -83,7 +77,7 @@ namespace r6marketplaceclient
         {
             try
             {
-                var item = await client.ItemInfoEndpoints.GetItem(itemId);
+                var item = await _client.ItemInfoEndpoints.GetItem(itemId);
                 return item;
             }
             catch (HttpRequestException ex) when (ex.StatusCode == HttpStatusCode.NotFound)

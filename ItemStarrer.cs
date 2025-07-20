@@ -1,18 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace r6marketplaceclient
 {
-    class ItemStarrer
+    public static class ItemStarrer
     {
+        static ItemStarrer()
+        {
+            LoadStarredItems();
+        }
         public static HashSet<string> StarredItems { get; private set; } = new();
         public static bool IsItemStarred(string itemId) => StarredItems.Contains(itemId);
-        public static void LoadStarredItems()
+        private static void LoadStarredItems()
         {
             if (!File.Exists("data/starred.dat"))
             {
@@ -33,7 +32,7 @@ namespace r6marketplaceclient
             bool remove = StarredItems.Remove(itemId);
             if (remove)
             {
-                var lines = File.ReadAllLines("data/starred.dat").Where(line => line != itemId);
+                IEnumerable<string> lines = File.ReadAllLines("data/starred.dat").Where(line => line != itemId);
                 File.WriteAllLines("data/starred.dat", lines);
             }
             Console.WriteLine($"Item with ID {itemId} has been unstarred.");

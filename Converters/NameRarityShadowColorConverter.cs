@@ -13,23 +13,19 @@ namespace r6marketplaceclient.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is string Rarity)
+            if (value is not string rarity) return new SolidColorBrush(Colors.White);
+            return rarity switch
             {
-                switch (Rarity)
-                {
-                    case "rarity_uncommon":
-                        return new SolidColorBrush(Color.FromRgb(0, 255, 0)); // Green
-                    case "rarity_rare":
-                        return new SolidColorBrush(Color.FromRgb(0, 128, 255)); // Blue
-                    case "rarity_superrare":
-                        return new SolidColorBrush(Color.FromRgb(255, 0, 255)); // Purple
-                    case "rarity_legendary":
-                        return new SolidColorBrush(Color.FromRgb(255, 162, 23)); // Orange
-                    default:
-                        return new SolidColorBrush(Colors.White);
-                }
-            }
-            return new SolidColorBrush(Colors.White);
+                "rarity_uncommon" => new SolidColorBrush(Color.FromRgb(0, 255, 0)) // Green
+                ,
+                "rarity_rare" => new SolidColorBrush(Color.FromRgb(0, 128, 255)) // Blue
+                ,
+                "rarity_superrare" => new SolidColorBrush(Color.FromRgb(255, 0, 255)) // Purple
+                ,
+                "rarity_legendary" => new SolidColorBrush(Color.FromRgb(255, 162, 23)) // Orange
+                ,
+                _ => new SolidColorBrush(Colors.White)
+            };
         }
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {

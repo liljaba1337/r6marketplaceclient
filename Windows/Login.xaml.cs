@@ -1,25 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Effects;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using r6marketplaceclient.UserControls;
 
 namespace r6marketplaceclient.Windows
 {
     /// <summary>
     /// Interaction logic for Login.xaml
     /// </summary>
-    public partial class Login : Window
+    public partial class Login
     {
         private readonly MainWindow _mainWindow;
         private readonly UserControls.MainWindowControls.SearchUserControl _searchUserControl;
@@ -46,7 +36,7 @@ namespace r6marketplaceclient.Windows
 
         private void UpdateLoginButtonState()
         {
-            if (emailBox.Text.Count() > 0 && passwordBox.Password.Count() > 0)
+            if (emailBox.Text.Any() && passwordBox.Password.Any())
             {
                 loginButton.IsEnabled = true;
                 loginButton.Effect = new DropShadowEffect
@@ -89,13 +79,8 @@ namespace r6marketplaceclient.Windows
 
         private void Window_KeyDown(object sender, KeyEventArgs e)
         {
-            if(sender is Window window && e.Key == Key.Enter)
-            {
-                if(loginButton.IsEnabled)
-                {
-                    loginButton_Click(sender, e);
-                }
-            }
+            if (e.Key != Key.Enter) return;
+            if(loginButton.IsEnabled) loginButton_Click(sender, e);
         }
     }
 }

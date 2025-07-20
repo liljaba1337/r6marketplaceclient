@@ -12,7 +12,7 @@ namespace r6marketplaceclient.CustomComponents
 {
     internal class TextBoxPlaceholder
     {
-        public static string GetPlaceholder(DependencyObject obj) =>
+        private static string GetPlaceholder(DependencyObject obj) =>
             (string)obj.GetValue(PlaceholderProperty);
 
         public static void SetPlaceholder(DependencyObject obj, string value) =>
@@ -30,22 +30,20 @@ namespace r6marketplaceclient.CustomComponents
 
         private static void OnPlaceholderChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            if (d is TextBox textBoxControl)
+            if (d is not TextBox textBoxControl) return;
+            if (!textBoxControl.IsLoaded)
             {
-                if (!textBoxControl.IsLoaded)
-                {
-                    // Ensure that the events are not added multiple times
-                    textBoxControl.Loaded -= TextBoxControl_Loaded;
-                    textBoxControl.Loaded += TextBoxControl_Loaded;
-                }
-
-                textBoxControl.TextChanged -= TextBoxControl_TextChanged;
-                textBoxControl.TextChanged += TextBoxControl_TextChanged;
-
-                // If the adorner exists, invalidate it to draw the current text
-                if (GetOrCreateAdorner(textBoxControl, out PlaceholderAdorner adorner))
-                    adorner.InvalidateVisual();
+                // Ensure that the events are not added multiple times
+                textBoxControl.Loaded -= TextBoxControl_Loaded;
+                textBoxControl.Loaded += TextBoxControl_Loaded;
             }
+
+            textBoxControl.TextChanged -= TextBoxControl_TextChanged;
+            textBoxControl.TextChanged += TextBoxControl_TextChanged;
+
+            // If the adorner exists, invalidate it to draw the current text
+            if (GetOrCreateAdorner(textBoxControl, out PlaceholderAdorner adorner))
+                adorner.InvalidateVisual();
         }
 
         private static void TextBoxControl_Loaded(object sender, RoutedEventArgs e)

@@ -1,19 +1,18 @@
 ﻿<UserControl x:Class="r6marketplaceclient.UserControls.Common.ItemGridView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:r6marketplaceclient.UserControls.Common"
-             xmlns:l="clr-namespace:r6marketplaceclient.CustomComponents"
              xmlns:converters="clr-namespace:r6marketplaceclient.Converters"
              xmlns:vm="clr-namespace:r6marketplaceclient.ViewModels"
              mc:Ignorable="d"
              xmlns:design="clr-namespace:r6marketplaceclient.DesignTimeData"
              d:DataContext="{d:DesignInstance Type=design:DesignTimeItemViewModelCollection, IsDesignTimeCreatable=True}"
-             Height="Auto" Width="Auto">
+             d:DesignHeight="665"
+             d:DesignWidth="900">
     <UserControl.Resources>
         <converters:PriceChangeColorConverter x:Key="PriceChangeColorConverter" />
-        <converters:NameRarityColorConverter x:Key="NameRarityColorConverter" />
         <FontFamily x:Key="InterBlack">
             pack://application:,,,/r6marketplaceclient;component/Resources/#Inter Black
         </FontFamily>
@@ -317,14 +316,133 @@
         </Style>
     </UserControl.Resources>
     <Grid>
-        <StackPanel
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="217" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <!-- Sidebar Filters -->
+        <Border Grid.Column="0"
+                Background="#FF141414"
+                Margin="5"
+                CornerRadius="4"
+                BorderBrush="{DynamicResource AccentColor}"
+                BorderThickness="1">
+            <Border.Effect>
+                <DropShadowEffect Color="#FF000000"
+                                  BlurRadius="10"
+                                  ShadowDepth="0"
+                                  Opacity="0.5" />
+            </Border.Effect>
+            <StackPanel Orientation="Vertical"
+                        Margin="10">
+                <TextBlock Text="Filters"
+                           FontSize="18"
+                           FontWeight="Bold"
+                           Foreground="#FAFAFA"
+                           FontFamily="{StaticResource InterBlack}"
+                           Margin="0,0,0,10" />
+
+                <TextBox x:Name="SearchBox"
+                         KeyDown="SearchBox_KeyDown"
+                         Style="{StaticResource FilterTextBoxStyle}"
+                         Width="128" />
+
+                <TextBlock Text="Weapon"
+                           Foreground="#FF999A9B"
+                           FontFamily="{StaticResource InterBlack}"
+                           Margin="5,10,0,2" />
+                <ComboBox x:Name="WeaponFilterComboBox"
+                          Style="{StaticResource FilterComboBoxStyle}" />
+
+                <TextBlock Text="Season"
+                           Foreground="#FF999A9B"
+                           FontFamily="{StaticResource InterBlack}"
+                           Margin="5,10,0,2" />
+                <ComboBox x:Name="SeasonFilterComboBox"
+                          Style="{StaticResource FilterComboBoxStyle}" />
+
+                <TextBlock Text="Event"
+                           Foreground="#FF999A9B"
+                           FontFamily="{StaticResource InterBlack}"
+                           Margin="5,10,0,2" />
+                <ComboBox x:Name="EventFilterComboBox"
+                          Style="{StaticResource FilterComboBoxStyle}" />
+
+                <TextBlock Text="Type"
+                           Foreground="#FF999A9B"
+                           FontFamily="{StaticResource InterBlack}"
+                           Margin="5,10,0,2" />
+                <ComboBox x:Name="TypeFilterComboBox"
+                          Style="{StaticResource FilterComboBoxStyle}" />
+
+                <TextBlock Text="Rarity"
+                           Foreground="#FF999A9B"
+                           FontFamily="{StaticResource InterBlack}"
+                           Margin="5,10,0,2" />
+                <ComboBox x:Name="RarityFilterComboBox"
+                          Style="{StaticResource FilterComboBoxStyle}" />
+
+                <TextBlock Text="Operator"
+                           Foreground="#FF999A9B"
+                           FontFamily="{StaticResource InterBlack}"
+                           Margin="5,10,0,2" />
+                <ComboBox x:Name="OperatorFilterComboBox"
+                          Style="{StaticResource FilterComboBoxStyle}" />
+
+                <TextBlock Text="Esports Team"
+                           Foreground="#FF999A9B"
+                           FontFamily="{StaticResource InterBlack}"
+                           Margin="5,10,0,2" />
+                <ComboBox x:Name="TeamFilterComboBox"
+                          Style="{StaticResource FilterComboBoxStyle}" />
+
+                <TextBlock Text="Price Range"
+                           Foreground="#FF999A9B"
+                           FontFamily="{StaticResource InterBlack}"
+                           Margin="5,10,0,2" />
+                <Border Background="#FF343434"
+                        CornerRadius="4"
+                        BorderBrush="{DynamicResource AccentColor}"
+                        BorderThickness=".7"
+                        Padding="5"
+                        Margin="5,2,5,5">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBox x:Name="MinPriceTextBox"
+                                 Style="{StaticResource FilterTextBoxStyle}"
+                                 Width="65"
+                                 Text="10"
+                                 HorizontalContentAlignment="Center"
+                                 MaxLength="7" />
+                        <TextBlock Text="-"
+                                   Foreground="#FF999A9B"
+                                   FontFamily="{StaticResource InterBlack}"
+                                   VerticalAlignment="Center"
+                                   Margin="5,0" />
+                        <TextBox x:Name="MaxPriceTextBox"
+                                 Style="{StaticResource FilterTextBoxStyle}"
+                                 Width="65"
+                                 Text="1000000"
+                                 HorizontalContentAlignment="Center"
+                                 MaxLength="7" />
+                    </StackPanel>
+                </Border>
+
+                <CheckBox x:Name="OnlyStarsCheck"
+                          Content="Only bookmarked"
+                          Style="{StaticResource FilterCheckBoxStyle}"
+                          Click="OnlyStarsCheck_Click" />
+            </StackPanel>
+        </Border>
+
+        <!-- Main Items Area -->
+        <StackPanel Grid.Column="1"
                     Background="#FF100F0F"
                     Margin="0,0,0,5">
-            <TextBlock Text="hi"></TextBlock>
             <StackPanel x:Name="NoItemsPlaceholder"
                         VerticalAlignment="Center"
-                        Visibility="{Binding IsEmpty, RelativeSource={RelativeSource AncestorType=UserControl}}" >
-            <TextBlock Text="No items found"
+                        Visibility="Collapsed">
+                <TextBlock Text="No items found"
                            FontSize="36"
                            Foreground="#FF999A9B"
                            TextAlignment="Center"
@@ -336,11 +454,11 @@
                        Margin="0,0,0,10" />
             </StackPanel>
             <ScrollViewer VerticalScrollBarVisibility="Auto"
-                          x:Name="scrollViewer"
+                          x:Name="ScrollViewer"
                           Height="644">
                 <StackPanel>
-                    <ItemsControl ItemsSource="{Binding Items, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                  x:Name="itemsControl">
+                    <ItemsControl ItemsSource="{Binding Items}"
+                                  x:Name="ItemsControl">
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
                                 <WrapPanel IsItemsHost="True" />
@@ -370,7 +488,7 @@
                                         CornerRadius="4"
                                         Cursor="Hand"
                                         ClipToBounds="False"
-                                        MouseLeftButtonDown="ItemCard_MouseLeftButtonDown"
+                                        MouseLeftButtonDown="Border_MouseLeftButtonDown"
                                         RenderTransformOrigin="0.5,0.5">
                                     <Border.RenderTransform>
                                         <ScaleTransform x:Name="scaleTransform"
@@ -518,7 +636,7 @@
                     </ItemsControl>
                     <Button x:Name="LoadMoreButton"
                             Content="Load More"
-                            Visibility="{Binding IsLoadMoreVisible}"
+                            Visibility="Visible"
                             Style="{StaticResource LoadMoreButtonStyle}"
                             HorizontalAlignment="Center"
                             Click="LoadMoreButton_Click" />

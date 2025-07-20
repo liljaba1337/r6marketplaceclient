@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
+﻿using System.IO;
 using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
+using System.Text.Json.Serialization;
 
 namespace r6marketplaceclient
 {
@@ -13,15 +9,19 @@ namespace r6marketplaceclient
     {
         public void Dispose()
         {
-            email = null;
-            password = null;
-            token = null;
+            Email = null;
+            Password = null;
+            Token = null;
         }
-        public string? email { get; set; }
-        public string? password { get; set; }
-        public string? token { get; set; }
+
+        [JsonPropertyName("email")]
+        public string? Email { get; set; }
+        [JsonPropertyName("password")]
+        public string? Password { get; set; }
+        [JsonPropertyName("token")]
+        public string? Token { get; set; }
     }
-    internal class SecureStorage
+    internal static class SecureStorage
     {
         internal static SecureStorageFormat? Decrypt()
         {
@@ -35,9 +35,9 @@ namespace r6marketplaceclient
         {
             using SecureStorageFormat secureStorageFormat = new SecureStorageFormat
             {
-                email = email,
-                password = password,
-                token = token
+                Email = email,
+                Password = password,
+                Token = token
             };
             string jsonData = System.Text.Json.JsonSerializer.Serialize(secureStorageFormat);
             byte[] encryptedData = _Encrypt(jsonData);
@@ -50,13 +50,13 @@ namespace r6marketplaceclient
             switch (field)
             {
                 case "email":
-                    secureStorageFormat.email = data;
+                    secureStorageFormat.Email = data;
                     break;
                 case "password":
-                    secureStorageFormat.password = data;
+                    secureStorageFormat.Password = data;
                     break;
                 case "token":
-                    secureStorageFormat.token = data;
+                    secureStorageFormat.Token = data;
                     break;
                 default:
                     throw new ArgumentException("Invalid field name");

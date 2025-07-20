@@ -13,15 +13,13 @@ namespace r6marketplaceclient.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is double priceChange)
+            if (value is not double priceChange) return new SolidColorBrush(Colors.White);
+            return priceChange switch
             {
-                if (priceChange > 0)
-                    return new SolidColorBrush(Color.FromRgb(46, 204, 113));
-                if (priceChange < 0)
-                    return new SolidColorBrush(Color.FromRgb(231, 76, 60));
-                return new SolidColorBrush(Color.FromRgb(176, 176, 176));
-            }
-            return new SolidColorBrush(Colors.White);
+                > 0 => new SolidColorBrush(Color.FromRgb(46, 204, 113)),
+                < 0 => new SolidColorBrush(Color.FromRgb(231, 76, 60)),
+                _ => new SolidColorBrush(Color.FromRgb(176, 176, 176))
+            };
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

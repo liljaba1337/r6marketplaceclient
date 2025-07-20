@@ -3,8 +3,6 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:local="clr-namespace:r6marketplaceclient.UserControls.MainWindowControls"
-             xmlns:l="clr-namespace:r6marketplaceclient.CustomComponents"
              xmlns:converters="clr-namespace:r6marketplaceclient.Converters"
              xmlns:vm="clr-namespace:r6marketplaceclient.ViewModels"
              mc:Ignorable="d"
@@ -14,7 +12,6 @@
              Loaded="UserControl_Loaded">
     <UserControl.Resources>
         <converters:PriceChangeColorConverter x:Key="PriceChangeColorConverter" />
-            <converters:NameRarityColorConverter x:Key="NameRarityColorConverter" />
             <FontFamily x:Key="InterBlack">
                 pack://application:,,,/r6marketplaceclient;component/Resources/#Inter Black
             </FontFamily>
@@ -354,49 +351,49 @@
                            Foreground="#FF999A9B"
                            FontFamily="{StaticResource InterBlack}"
                            Margin="5,10,0,2" />
-                <ComboBox x:Name="weaponFilterComboBox"
+                <ComboBox x:Name="WeaponFilterComboBox"
                           Style="{StaticResource FilterComboBoxStyle}" />
 
                 <TextBlock Text="Season"
                            Foreground="#FF999A9B"
                            FontFamily="{StaticResource InterBlack}"
                            Margin="5,10,0,2" />
-                <ComboBox x:Name="seasonFilterComboBox"
+                <ComboBox x:Name="SeasonFilterComboBox"
                           Style="{StaticResource FilterComboBoxStyle}" />
 
                 <TextBlock Text="Event"
                            Foreground="#FF999A9B"
                            FontFamily="{StaticResource InterBlack}"
                            Margin="5,10,0,2" />
-                <ComboBox x:Name="eventFilterComboBox"
+                <ComboBox x:Name="EventFilterComboBox"
                           Style="{StaticResource FilterComboBoxStyle}" />
 
                 <TextBlock Text="Type"
                            Foreground="#FF999A9B"
                            FontFamily="{StaticResource InterBlack}"
                            Margin="5,10,0,2" />
-                <ComboBox x:Name="typeFilterComboBox"
+                <ComboBox x:Name="TypeFilterComboBox"
                           Style="{StaticResource FilterComboBoxStyle}" />
 
                 <TextBlock Text="Rarity"
                            Foreground="#FF999A9B"
                            FontFamily="{StaticResource InterBlack}"
                            Margin="5,10,0,2" />
-                <ComboBox x:Name="rarityFilterComboBox"
+                <ComboBox x:Name="RarityFilterComboBox"
                           Style="{StaticResource FilterComboBoxStyle}" />
 
                 <TextBlock Text="Operator"
                            Foreground="#FF999A9B"
                            FontFamily="{StaticResource InterBlack}"
                            Margin="5,10,0,2" />
-                <ComboBox x:Name="operatorFilterComboBox"
+                <ComboBox x:Name="OperatorFilterComboBox"
                           Style="{StaticResource FilterComboBoxStyle}" />
 
                 <TextBlock Text="Esports Team"
                            Foreground="#FF999A9B"
                            FontFamily="{StaticResource InterBlack}"
                            Margin="5,10,0,2" />
-                <ComboBox x:Name="teamFilterComboBox"
+                <ComboBox x:Name="TeamFilterComboBox"
                           Style="{StaticResource FilterComboBoxStyle}" />
 
                 <TextBlock Text="Price Range"
@@ -410,7 +407,7 @@
                         Padding="5"
                         Margin="5,2,5,5">
                     <StackPanel Orientation="Horizontal">
-                        <TextBox x:Name="minPriceTextBox"
+                        <TextBox x:Name="MinPriceTextBox"
                                  Style="{StaticResource FilterTextBoxStyle}"
                                  Width="65"
                                  Text="10"
@@ -421,7 +418,7 @@
                                    FontFamily="{StaticResource InterBlack}"
                                    VerticalAlignment="Center"
                                    Margin="5,0" />
-                        <TextBox x:Name="maxPriceTextBox"
+                        <TextBox x:Name="MaxPriceTextBox"
                                  Style="{StaticResource FilterTextBoxStyle}"
                                  Width="65"
                                  Text="1000000"
@@ -456,11 +453,11 @@
                        Margin="0,0,0,10" />
             </StackPanel>
             <ScrollViewer VerticalScrollBarVisibility="Auto"
-                          x:Name="scrollViewer"
+                          x:Name="ScrollViewer"
                           Height="644">
                 <StackPanel>
                     <ItemsControl ItemsSource="{Binding Items}"
-                                  x:Name="itemsControl">
+                                  x:Name="ItemsControl">
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
                                 <WrapPanel IsItemsHost="True" />
