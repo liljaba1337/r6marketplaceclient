@@ -21,25 +21,39 @@ namespace r6marketplaceclient
             foreach (var window in _visibleCards) window.Close();
         }
         internal async Task<List<ItemViewModel>> PerformSearch(List<string> tags, string type, int minPrice,
-            int maxPrice, string text, bool onlyStars, int count, int offset)
+            int maxPrice, string text, bool onlyStars, int count, int offset, bool isInventorySearch = false)
         {
             List<string> types = new List<string>();
             if (type != "All") types.Add(type);
 
-            MainWindow.FooterViewModel.Balance = await ApiClient.GetBalance();
-
-            List<PurchasableItem> items = await ApiClient.Search(
-                text,
-                tags,
-                types,
-                minPrice,
-                maxPrice,
-                onlyStars,
-                count,
-                offset
-            );
-            if (items.Count == 0) return new();
-            return items.Select(item => new ItemViewModel(item)).ToList();
+            if (isInventorySearch)
+            {
+                var items = await ApiClient.SearchInventory(
+                    text,
+                    tags,
+                    types,
+                    minPrice,
+                    maxPrice,
+                    onlyStars,
+                    500,
+                    offset
+                );
+                return items.Select(item => new ItemViewModel(item)).ToList();
+            }
+            else
+            {
+                var items = await ApiClient.Search(
+                    text,
+                    tags,
+                    types,
+                    minPrice,
+                    maxPrice,
+                    onlyStars,
+                    count,
+                    offset
+                );
+                return items.Select(item => new ItemViewModel(item)).ToList();
+            }
         }
     }
 }

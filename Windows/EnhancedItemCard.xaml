@@ -86,9 +86,9 @@
             <StackPanel Grid.Column="0">
                 <TextBlock FontSize="16" FontWeight="Bold" Margin="0,5">
                     <TextBlock.Inlines>
-                        <Run Text="{Binding Price, StringFormat=Current Price: {0}}" Foreground="#00FFB7"/>
+                        <Run Text="{Binding Price, StringFormat=Current Price: {0}, Mode=OneWay}" Foreground="#00FFB7"/>
                         <Run Text=" "/>
-                        <Run Text="{Binding PriceChange, StringFormat=({0:+0.0;-0.0}%)}"
+                        <Run Text="{Binding PriceChange, StringFormat=({0:+0.0;-0.0}%), Mode=OneWay}"
                             Foreground="{Binding PriceChange, Converter={StaticResource PriceChangeColorConverter}}"/>
                     </TextBlock.Inlines>
                 </TextBlock>

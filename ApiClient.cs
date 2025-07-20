@@ -67,6 +67,28 @@ namespace r6marketplaceclient
             Debug.WriteLine($"Filtered to {filtereditems.Count} starred items.");
             return filtereditems;
         }
+        internal static async Task<List<SellableItem>> SearchInventory(
+            string name,
+            List<string> tags,
+            List<string> types,
+            int minPrice = 10,
+            int maxPrice = 1000000,
+            bool onlyStars = false,
+            int limit = 400,
+            int offset = 0)
+        {
+            var items = await _client.AccountEndpoints.GetInventoryUnrestricted(name, types, tags,
+                r6_marketplace.Endpoints.SearchEndpoints.SortBy.PurchaseAvailaible,
+                r6_marketplace.Endpoints.SearchEndpoints.SortDirection.DESC, limit, offset);
+            Debug.WriteLine($"Found {items.Count} items in inventory matching the search criteria.");
+            List<SellableItem> filtereditems = items.Where(item => item.LastSoldAtPrice >= minPrice && item.LastSoldAtPrice <= maxPrice).ToList();
+            
+            if (!onlyStars) return filtereditems;
+            
+            filtereditems = filtereditems.Where(item => ItemStarrer.IsItemStarred(item.ID)).ToList();
+            Debug.WriteLine($"Filtered to {filtereditems.Count} starred items in inventory.");
+            return filtereditems;
+        }
         internal static async Task<ItemPriceHistory?> GetItemPriceHistory(string itemId)
         {
             var history = await _client.ItemInfoEndpoints.GetItemPriceHistory(itemId);

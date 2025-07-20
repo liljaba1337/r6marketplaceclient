@@ -14,11 +14,21 @@
              d:DesignWidth="900"
              Loaded="UserControl_Loaded">
     <Grid>
-        <common:ItemGridView x:Name="ItemGrid"
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="217" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <common:FiltersControl x:Name="FiltersControl"
+                               Grid.Column="0"
+                               ComboBoxSelectionChanged="ItemGrid_ComboBoxSelectionChanged"
+                               SearchBoxKeyDown="ItemGrid_SearchBoxKeyDown"
+                               OnlyStarsClick="ItemGrid_OnlyStarsClick" />
+        
+        <common:ItemGridView Grid.Column="1"
+                             x:Name="ItemGrid"
                              Items="{Binding Items}"
-                             ComboBoxSelectionChanged="ItemGrid_ComboBoxSelectionChanged"
-                             SearchBoxKeyDown="ItemGrid_SearchBoxKeyDown"
-                             OnlyStarsClick="ItemGrid_OnlyStarsClick"
-                             ItemCardMouseClick="ItemGrid_ItemCardMouseClick"/>
+                             ItemCardMouseClick="ItemGrid_ItemCardMouseClick"
+                             LoadMoreButtonClick="ItemGrid_LoadMoreButtonClick"/>
     </Grid>
 </UserControl>
