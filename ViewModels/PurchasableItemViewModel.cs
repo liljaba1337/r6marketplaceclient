@@ -1,6 +1,7 @@
 ﻿using System.Windows.Media;
 using r6_marketplace.Classes.Item;
 using r6marketplaceclient.Converters;
+using r6marketplaceclient.Utils;
 
 namespace r6marketplaceclient.ViewModels
 {
@@ -20,6 +21,7 @@ namespace r6marketplaceclient.ViewModels
             get => ItemStarrer.IsItemStarred(Item.ID);
             set => ItemStarrer.ToggleStarItem(Item.ID, value);
         }
+        public bool IsOwned => Item.IsOwned;
         public Uri ImageUri => Item.AssetUrl.Value;
         public string Name => Item.Name;
         public Color ShadowColor => CompileTimeRarityColorConverter.Convert(Rarity);

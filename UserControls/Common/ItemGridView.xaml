@@ -337,7 +337,7 @@
                           Height="644">
                 <StackPanel>
                     <ItemsControl ItemsSource="{Binding Items}"
-                                  x:Name="ItemsControl">
+                                  x:Name="ItemsControl" Margin="5" >
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
                                 <WrapPanel IsItemsHost="True" />

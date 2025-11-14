@@ -3,8 +3,9 @@ using System.Net;
 using System.Net.Http;
 using r6_marketplace;
 using r6_marketplace.Classes.Item;
+using r6marketplaceclient.Utils;
 
-namespace r6marketplaceclient
+namespace r6marketplaceclient.Services
 {
     internal static class ApiClient
     {

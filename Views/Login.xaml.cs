@@ -3,8 +3,9 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Effects;
+using r6marketplaceclient.Services;
 
-namespace r6marketplaceclient.Windows
+namespace r6marketplaceclient.Views
 {
     /// <summary>
     /// Interaction logic for Login.xaml

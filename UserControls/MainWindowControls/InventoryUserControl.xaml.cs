@@ -5,6 +5,7 @@ using System.Windows.Controls;
 using r6_marketplace.Utils;
 using r6marketplaceclient.UserControls.Common;
 using r6marketplaceclient.ViewModels;
+using r6marketplaceclient.Views.Utils;
 using SkiaSharp;
 
 namespace r6marketplaceclient.UserControls.MainWindowControls;
@@ -28,11 +29,12 @@ public partial class InventoryUserControl : UserControl, INotifyPropertyChanged
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
-    private readonly MainPageBackend _backend = new();
+    private readonly MainWindowBackend _backend = new();
     public InventoryUserControl()
     {
         InitializeComponent();
         DataContext = this;
+        ItemGrid.SetLoadMoreButtonVisibility(false);
     }
     private async void UserControl_Loaded(object sender, System.Windows.RoutedEventArgs e)
     {
@@ -43,7 +45,7 @@ public partial class InventoryUserControl : UserControl, INotifyPropertyChanged
     {
         Filters filters = FiltersControl.GetAppliedFilters();
 
-        var resultitems = await _backend.PerformSearch(
+        var resultitems = await MainWindowBackend.PerformSearch(
             filters.Tags,
             filters.Type,
             filters.MinPrice,

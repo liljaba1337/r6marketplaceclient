@@ -3,8 +3,9 @@ using System.Windows;
 using System.Windows.Controls;
 using r6marketplaceclient.UserControls.MainWindowControls;
 using r6marketplaceclient.ViewModels;
+using r6marketplaceclient.Views.Utils;
 
-namespace r6marketplaceclient
+namespace r6marketplaceclient.Views
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -27,6 +28,7 @@ namespace r6marketplaceclient
 
             MainContent.Content = _contentMap["search"];
             _lastHeaderButton = SearchButton;
+            DataContext = FooterViewModel;
         }
 
         private void SwitchInactiveButton(Button button)

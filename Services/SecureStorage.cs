@@ -2,6 +2,7 @@
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json.Serialization;
+using System.Windows;
 
 namespace r6marketplaceclient
 {
@@ -28,6 +29,7 @@ namespace r6marketplaceclient
             if (!File.Exists("data/secret.dat")) return null;
             byte[] encryptedData = File.ReadAllBytes("data/secret.dat");
             string decryptedData = _Decrypt(encryptedData);
+            if (decryptedData == string.Empty) return null;
             SecureStorageFormat? secureStorageFormat = System.Text.Json.JsonSerializer.Deserialize<SecureStorageFormat>(decryptedData);
             return secureStorageFormat;
         }
@@ -74,8 +76,18 @@ namespace r6marketplaceclient
 
         private static string _Decrypt(byte[] encryptedData)
         {
-            byte[] decrypted = ProtectedData.Unprotect(encryptedData, null, DataProtectionScope.CurrentUser);
-            return Encoding.UTF8.GetString(decrypted);
+            try
+            {
+                byte[] decrypted = ProtectedData.Unprotect(encryptedData, null, DataProtectionScope.CurrentUser);
+                return Encoding.UTF8.GetString(decrypted);
+            }
+            catch (CryptographicException)
+            {
+                MessageBox.Show("Failed to decrypt secure storage data. The data may be corrupted or was created under a different user account.",
+                    "Decryption Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return string.Empty;
+            }
+
         }
     }
 }

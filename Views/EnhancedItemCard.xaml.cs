@@ -1,8 +1,9 @@
 ﻿using System.Windows;
+using r6marketplaceclient.Services;
 using r6marketplaceclient.ViewModels;
 using ScottPlot;
 
-namespace r6marketplaceclient.Windows
+namespace r6marketplaceclient.Views
 {
     /// <summary>
     /// Interaction logic for EnhancedItemCard.xaml

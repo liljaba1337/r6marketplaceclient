@@ -1,12 +1,15 @@
-﻿using System.Collections.ObjectModel;
+﻿using r6_marketplace.Utils;
+using r6marketplaceclient.Services;
+using r6marketplaceclient.UserControls.Common;
+using r6marketplaceclient.ViewModels;
+using r6marketplaceclient.Views;
+using r6marketplaceclient.Views.Utils;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using r6_marketplace.Utils;
-using r6marketplaceclient.ViewModels;
-using r6marketplaceclient.Windows;
 
 namespace r6marketplaceclient.UserControls.MainWindowControls
 {
@@ -18,115 +21,74 @@ namespace r6marketplaceclient.UserControls.MainWindowControls
         private int _offset;
         private readonly MainWindow _mainWindow;
         private readonly List<ComboBox> _comboBoxes = new();
-        private readonly MainPageBackend _backend = new();
+        private readonly MainWindowBackend _backend = new();
 
         public static ObservableCollection<ItemViewModel> Items { get; } = new();
         public event PropertyChangedEventHandler? PropertyChanged;
         public SearchUserControl(MainWindow window)
         {
             InitializeComponent();
-            SetupComponents();
             DataContext = this;
             _mainWindow = window;
-        }
-        private async void SearchBox_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Enter)
-            {
-                await PrepareAndPerformSearch();
-            }
-        }
-        private void InitComboBox<TEnum>(ComboBox comboBox) where TEnum : Enum
-        {
-            var items = Enum.GetNames(typeof(TEnum))
-                .Select(SearchTags.GetOriginalName)
-                .Order()
-                .ToList();
-
-            items.Insert(0, "All");
-            comboBox.ItemsSource = items;
-            comboBox.SelectedIndex = 0;
-            _comboBoxes.Add(comboBox);
-
-            comboBox.SelectionChanged += filterComboBox_SelectionChanged;
-        }
-        private async void filterComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (sender is ComboBox comboBox && comboBox.SelectedItem != null)
-            {
-                Debug.WriteLine($"ComboBox {comboBox.Name} changed to {comboBox.SelectedItem}");
-            }
-            await PrepareAndPerformSearch(count: OnlyStarsCheck.IsChecked == true ? 500 : 40);
+            ItemGrid.SetLoadMoreButtonVisibility(false);
         }
         internal async Task PrepareAndPerformSearch(int offset = 0, bool clearItems = true, int count = 40)
         {
-            List<string> tags = new List<string>();
+            Filters filters = FiltersControl.GetAppliedFilters();
 
-            foreach (var comboBox in _comboBoxes)
-            {
-                if (comboBox.SelectedItem != null && comboBox.SelectedItem.ToString() != "All"
-                    && comboBox.Name != "typeFilterComboBox")
-                {
-                    tags.Add(SearchTags.GetAPIName(comboBox.SelectedItem.ToString()!));
-                }
-            }
-
-            var items = await _backend.PerformSearch(
-                tags,
-                TypeFilterComboBox.SelectedItem?.ToString() ?? "All",
-                int.TryParse(MinPriceTextBox.Text, out int res) ? res : 10,
-                int.TryParse(MaxPriceTextBox.Text, out int res1) ? res1 : 1000000,
-                SearchBox.Text,
-                OnlyStarsCheck.IsChecked ?? false,
-                count,
-                offset
+            var resultitems = await MainWindowBackend.PerformSearch(
+                filters.Tags,
+                filters.Type,
+                filters.MinPrice,
+                filters.MaxPrice,
+                filters.TextSearch,
+                filters.OnlyStars,
+                filters.OnlyStars ? 500 : count,
+                offset,
+                isInventorySearch: true
             );
-            bool found = items.Count > 0;
             if (clearItems) Items.Clear();
-            foreach (var item in items) Items.Add(item);
-            NoItemsPlaceholder.Visibility = !found && clearItems ? Visibility.Visible : Visibility.Collapsed;
-            LoadMoreButton.Visibility = count == 500 || (found && Items.Count > 0) ? Visibility.Visible : Visibility.Collapsed;
+            foreach (var item in resultitems) Items.Add(item);
+            ItemGrid.SetNoItemsPlaceholderVisibility(resultitems.Count == 0 && clearItems);
+            ItemGrid.SetLoadMoreButtonVisibility(count == 500 || (resultitems.Count > 0 && Items.Count > 0));
         }
-        private void SetupComponents()
+        private async void ItemGrid_SearchBoxKeyDown(object sender, Common.SearchBoxKeyDownEventArgs e)
         {
-            InitComboBox<SearchTags.Weapon>(WeaponFilterComboBox);
-            InitComboBox<SearchTags.Operator>(OperatorFilterComboBox);
-            InitComboBox<SearchTags.EsportsTeam>(TeamFilterComboBox);
-            InitComboBox<SearchTags.Event>(EventFilterComboBox);
-            InitComboBox<SearchTags.Rarity>(RarityFilterComboBox);
-            InitComboBox<SearchTags.Season>(SeasonFilterComboBox);
-            InitComboBox<SearchTags.Type>(TypeFilterComboBox);
-            LoadMoreButton.Visibility = Visibility.Collapsed;
+            await PrepareAndPerformSearch();
         }
-        private void TryAutoLogin()
-        {
-            if (ApiClient.IsAuthenticated) return;
-            using var data = SecureStorage.Decrypt();
-            if (data != null && !string.IsNullOrEmpty(data.Token)) ApiClient.SetToken(data.Token);
-        }
-        private void ItemCard_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            if (sender is Border { DataContext: ItemViewModel item })
-            {
-                _backend.ShowEnhancedItemCard(item);
-            }
-        }
-        private async void OnlyStarsCheck_Click(object sender, RoutedEventArgs e)
+
+        private async void ItemGrid_OnlyStarsClick(object sender, Common.OnlyStarsCheckChangedEventArgs e)
         {
             _offset = 0;
-            await PrepareAndPerformSearch(count: OnlyStarsCheck.IsChecked == true ? 500 : 40);
+            await PrepareAndPerformSearch();
         }
 
-        private async void LoadMoreButton_Click(object sender, RoutedEventArgs e)
+        private void ItemGrid_ItemCardMouseClick(object sender, ItemCardMouseEventArgs e)
         {
-            _offset += OnlyStarsCheck.IsChecked == true ? 500 : 40;
-            await PrepareAndPerformSearch(_offset, false, OnlyStarsCheck.IsChecked == true ? 500 : 40);
+            _backend.ShowEnhancedItemCard(e.Item);
+        }
+
+        private async void ItemGrid_ComboBoxSelectionChanged(object sender, Common.ComboBoxSelectionChangedEventArgs e)
+        {
+            await PrepareAndPerformSearch();
+        }
+
+        private async void ItemGrid_LoadMoreButtonClick(object sender, EventArgs e)
+        {
+            _offset += FiltersControl.GetAppliedFilters().OnlyStars ? 500 : 40;
+            await PrepareAndPerformSearch(_offset, false);
         }
 
         private async void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
             Debug.WriteLine("Control loaded, trying auto-login...");
-            TryAutoLogin();
+            using SecureStorageFormat? data = SecureStorage.Decrypt();
+            if (data == null)
+            {
+                ShowLoginWindow();
+                return;
+            }
+            TryAutoLogin(data);
             try
             {
                 await PrepareAndPerformSearch();
@@ -136,16 +98,13 @@ namespace r6marketplaceclient.UserControls.MainWindowControls
             {
                 Debug.WriteLine($"Error during search: {ex.Message}");
 
-                using SecureStorageFormat? data = SecureStorage.Decrypt();
-                if (data != null && !string.IsNullOrEmpty(data.Email) && !string.IsNullOrEmpty(data.Password))
+                if (!string.IsNullOrEmpty(data.Email) && !string.IsNullOrEmpty(data.Password))
                 {
                     Debug.WriteLine("Attempting to reauthenticate with stored credentials");
                     bool success = await ApiClient.Authenticate(data.Email, data.Password);
                     if (!success)
                     {
-                        Login loginWindow = new Login(_mainWindow, this);
-                        loginWindow.ShowDialog();
-                        loginWindow.Activate();
+                        
                     }
                     else
                     {
@@ -155,11 +114,19 @@ namespace r6marketplaceclient.UserControls.MainWindowControls
                 else
                 {
                     Debug.WriteLine("Showing login window.");
-                    Login loginWindow = new Login(_mainWindow, this);
-                    loginWindow.ShowDialog();
-                    loginWindow.Activate();
+                    ShowLoginWindow();
                 }
             }
+        }
+        private void ShowLoginWindow()
+        {
+            Login loginWindow = new Login(_mainWindow, this);
+            loginWindow.ShowDialog();
+        }
+        private void TryAutoLogin(SecureStorageFormat data)
+        {
+            if (ApiClient.IsAuthenticated) return;
+            if (data != null && !string.IsNullOrEmpty(data.Token)) ApiClient.SetToken(data.Token);
         }
     }
 }

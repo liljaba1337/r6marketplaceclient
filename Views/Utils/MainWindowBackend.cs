@@ -1,10 +1,11 @@
 ﻿using r6_marketplace.Classes.Item;
+using r6marketplaceclient.Services;
 using r6marketplaceclient.ViewModels;
-using r6marketplaceclient.Windows;
+using r6marketplaceclient.Views;
 
-namespace r6marketplaceclient
+namespace r6marketplaceclient.Views.Utils
 {
-    internal class MainPageBackend
+    internal class MainWindowBackend
     {
         private readonly HashSet<EnhancedItemCard> _visibleCards = new();
         internal void ShowEnhancedItemCard(ItemViewModel item)
@@ -20,7 +21,7 @@ namespace r6marketplaceclient
         {
             foreach (var window in _visibleCards) window.Close();
         }
-        internal async Task<List<ItemViewModel>> PerformSearch(List<string> tags, string type, int minPrice,
+        internal static async Task<List<ItemViewModel>> PerformSearch(List<string> tags, string type, int minPrice,
             int maxPrice, string text, bool onlyStars, int count, int offset, bool isInventorySearch = false)
         {
             List<string> types = new List<string>();
@@ -54,6 +55,11 @@ namespace r6marketplaceclient
                 );
                 return items.Select(item => new ItemViewModel(item)).ToList();
             }
+        }
+        internal static async Task UpdateBalance()
+        {
+            int balance = await ApiClient.GetBalance();
+            MainWindow.FooterViewModel.Balance = balance;
         }
     }
 }

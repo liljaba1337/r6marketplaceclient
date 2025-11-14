@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 using System.IO;
 
-namespace r6marketplaceclient
+namespace r6marketplaceclient.Utils
 {
     public static class ItemStarrer
     {
