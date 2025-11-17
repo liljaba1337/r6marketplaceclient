@@ -1,0 +1,3 @@
+[submodule "r6-marketplace"]
+	path = r6-marketplace
+	url = https://github.com/liljaba1337/r6-marketplace
