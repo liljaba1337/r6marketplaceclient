@@ -17,7 +17,6 @@
         <common:ItemGridView Grid.Column="1"
                      x:Name="ItemGrid"
                      Items="{Binding Items}"
-                     ItemCardMouseClick="ItemGrid_ItemCardMouseClick"
-                     LoadMoreButtonClick="ItemGrid_LoadMoreButtonClick"/>
+                     ItemCardMouseClick="ItemGrid_ItemCardMouseClick"/>
     </Grid>
 </UserControl>

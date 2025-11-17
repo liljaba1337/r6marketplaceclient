@@ -1,4 +1,6 @@
-﻿using System;
+﻿using r6marketplaceclient.UserControls.Common;
+using SkiaSharp;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -24,8 +26,13 @@ namespace r6marketplaceclient.UserControls.MainWindowControls
         public OrdersUserControl()
         {
             InitializeComponent();
+            DataContext = this;
+            ItemGrid.SetLoadMoreButtonVisibility(false);
         }
         private async void UserControl_Loaded(object sender, System.Windows.RoutedEventArgs e)
+        {
+        }
+        private void ItemGrid_ItemCardMouseClick(object sender, ItemCardMouseEventArgs e)
         {
         }
     }

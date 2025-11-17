@@ -23,7 +23,8 @@ namespace r6marketplaceclient.Views
             {
                 { "search", new SearchUserControl(this) },
                 { "bookmarks", new BookmarksUserControl() },
-                { "inventory", new InventoryUserControl() }
+                { "inventory", new InventoryUserControl() },
+                { "orders", new OrdersUserControl()  }
             };
 
             MainContent.Content = _contentMap["search"];
