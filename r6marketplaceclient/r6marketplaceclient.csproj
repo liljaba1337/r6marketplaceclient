@@ -20,9 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="r6-marketplace">
-      <HintPath>..\r6-marketplace\r6-marketplace\bin\Release\net8.0\r6-marketplace.dll</HintPath>
-    </Reference>
+	  <ProjectReference Include="..\r6-marketplace\r6-marketplace\r6-marketplace.csproj"></ProjectReference>
   </ItemGroup>
 
   <ItemGroup>
