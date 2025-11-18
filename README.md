@@ -1,6 +1,5 @@
 # r6marketplaceclient
 
-For now, I'm using a compiled version of my [R6S API wrapper](https://github.com/liljaba1337/r6-marketplace), so I can make all the required changes without pushing it to NuGet every time, therefore you'll need to manually build and reference it.
 
 The design is bad since I'm not a designer at all, but if someone wants to spend their time designing this project, I'll gladly accept any pull requests :3
 
@@ -14,10 +13,10 @@ The design is bad since I'm not a designer at all, but if someone wants to spend
 
 You can suggest something else by [opening an issue](https://github.com/liljaba1337/r6marketplaceclient/issues)
 
-## How to build?
-1. Clone or download the code of [r6-marketplace](https://github.com/liljaba1337/r6-marketplace), extract it somewhere, and build it.
-2. Open `r6marketplaceclient.csproj`, find `<Reference Include="r6-marketplace">` and update `HintPath` to point to the `r6-marketplace.dll` you just built (usually found in `r6-marketplace\bin\Release\net8.0`).
-3. Build the client and you're good to go!
+> [!NOTE]  
+> I'm using my [R6S API wrapper](https://github.com/liljaba1337/r6-marketplace), so you'll need to clone it too (already referenced in the repo).
 
+> [!IMPORTANT]  
+> Your credentials and authentication tokens are encrypted using `Windows Data Protection API (DPAPI)` and stored in `data/secret.dat`. The data is only decrypted and held in memory briefly, minimizing exposure and helping keep your credentials secure. While Microsoft ensures that this encryption cannot be broken without direct access to your machine, it is still recommended that you handle this file with care.
 
 ![screenshot](.github/screenshots/Screenshot_88.png)
