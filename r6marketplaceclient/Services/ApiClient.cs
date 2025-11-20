@@ -4,6 +4,7 @@ using System.Net.Http;
 using r6_marketplace;
 using r6_marketplace.Classes.Item;
 using r6marketplaceclient.Utils;
+using r6marketplaceclient.Views;
 
 namespace r6marketplaceclient.Services
 {
@@ -45,7 +46,6 @@ namespace r6marketplaceclient.Services
         }
 
         internal static async Task<int> GetBalance() => await _client.AccountEndpoints.GetBalance();
-
         internal static async Task<List<PurchasableItem>> Search(
             string name,
             List<string> tags,
@@ -66,6 +66,7 @@ namespace r6marketplaceclient.Services
             
             filtereditems = filtereditems.Where(item => ItemStarrer.IsItemStarred(item.ID)).ToList();
             Debug.WriteLine($"Filtered to {filtereditems.Count} starred items.");
+
             return filtereditems;
         }
         internal static async Task<List<SellableItem>> SearchInventory(

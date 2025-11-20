@@ -91,7 +91,7 @@ namespace r6marketplaceclient.UserControls.MainWindowControls
             TryAutoLogin(data);
             try
             {
-                await PrepareAndPerformSearch();
+                await FirstStart();
                 Debug.WriteLine("Search performed successfully.");
             }
             catch (Exception ex)
@@ -108,7 +108,7 @@ namespace r6marketplaceclient.UserControls.MainWindowControls
                     }
                     else
                     {
-                        await PrepareAndPerformSearch();
+                        await FirstStart();
                     }
                 }
                 else
@@ -117,6 +117,12 @@ namespace r6marketplaceclient.UserControls.MainWindowControls
                     ShowLoginWindow();
                 }
             }
+        }
+
+        private async Task FirstStart()
+        {
+            await PrepareAndPerformSearch();
+            await MainWindowBackend.UpdateBalance();
         }
         private void ShowLoginWindow()
         {
