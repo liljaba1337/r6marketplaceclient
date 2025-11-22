@@ -40,14 +40,15 @@ jobs:
           -r win-x64 
           --self-contained true 
           -o output 
-          -p:Version=1.0.${{ github.run_number }} 
+          -p:Version=0.0.${{ github.run_number }} 
           -p:InformationalVersion="0.0.${{ github.run_number }}+${{ steps.vars.outputs.sha_short }}"
 
-      - name: Zip Build Output
+      - name: Archive build output
         run: |
-          cd output
-          zip -r ../build.zip .
-          cd ..
+          $folder = "r6marketplace"
+          New-Item $folder -ItemType Directory
+          Copy-Item output\* $folder
+          Compress-Archive -Path $folder -DestinationPath build.zip
 
       - name: Create Pre-Release
         uses: softprops/action-gh-release@v2
