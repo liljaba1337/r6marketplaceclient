@@ -30,7 +30,7 @@ jobs:
 
       - name: Publish self-contained build
         run: >
-          dotnet publish 
+          dotnet publish r6marketplaceclient
           -c Release 
           -r win-x64 
           --self-contained true 
