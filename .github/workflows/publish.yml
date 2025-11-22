@@ -28,21 +28,23 @@ jobs:
         id: vars
         run: Add-Content $env:GITHUB_OUTPUT "sha_short=$(git rev-parse --short HEAD)"
 
-      - name: Update version with commit hash
-        run: |
-          (Get-Content Directory.Build.props) `
-            -replace '<Version>.*</Version>', "<Version>1.0.${{ steps.vars.outputs.sha_short }}</Version>" |
-            Out-File Directory.Build.props
-
       - name: Publish self-contained build
-        run: dotnet publish -c Release -r win-x64 --self-contained true -o output
+        run: >
+          dotnet publish 
+          -c Release 
+          -r win-x64 
+          --self-contained true 
+          -o output 
+          -p:Version=1.0.${{ github.run_number }} 
+          -p:InformationalVersion="0.0.${{ github.run_number }}+${{ steps.vars.outputs.sha_short }}"
 
       - name: Archive build output
         run: |
           $folder = "r6marketplace"
-          New-Item $folder -ItemType Directory
-          Copy-Item output\* $folder
-          Compress-Archive -Path $folder -DestinationPath r6marketplace.Windows.zip
+          New-Item $folder -ItemType Directory -Force
+          # Recurse ensures subfolders are copied if they exist
+          Copy-Item output\* $folder -Recurse
+          Compress-Archive -Path $folder -DestinationPath r6marketplace.Windows.zip -Force
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
